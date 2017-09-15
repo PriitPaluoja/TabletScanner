@@ -15,13 +15,11 @@ import javax.persistence.Id;
 @Getter
 @Setter
 @Entity
-public class User {
+public class Device {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String firstName;
-    private String lastName;
-    private String pin;
+    private String ident;
 }
