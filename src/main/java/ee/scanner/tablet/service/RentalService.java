@@ -1,4 +1,4 @@
-package ee.scanner.tablet;
+package ee.scanner.tablet.service;
 
 import ee.scanner.tablet.dto.RegisterDTO;
 

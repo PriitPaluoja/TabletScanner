@@ -1,6 +1,6 @@
 package ee.scanner.tablet.controller;
 
-import ee.scanner.tablet.RentalService;
+import ee.scanner.tablet.service.RentalService;
 import ee.scanner.tablet.dto.RegisterDTO;
 import ee.scanner.tablet.feedback.FeedbackType;
 import ee.scanner.tablet.util.ControllerUtil;

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>THMK Tahvelarvutite laenutus: admin</title>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" th:href="@{/main.css}"/>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-default navbar-masing-photo">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <img class="navbar-brand img-rounded" src="http://masing.tartu.ee//images/Pildid/Logod/THMK_logo.png" alt="THMK"/>
+                <a class="navbar-brand" href="#">Tahvelarvuti laenutussüsteem</a>
+            </div>
+        </div>
+    </nav>
+
+    <!--/*@thymesVar id="feedbackList" type="java.util.List<ee.scanner.tablet.feedback.Feedback>"*/-->
+    <div th:replace="fragments/feedback :: feedback-messages (feedbackList=${feedbackList})"></div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Seadme sisestus</div>
+        <div class="panel-body">
+            <!--/*@thymesVar id="deviceDTO" type="ee.scanner.tablet.dto.DeviceDTO"*/-->
+            <form th:action="@{/insert_device}" method="post" th:object="${deviceDTO}">
+                <div class="form-group">
+                    <label th:for="${#fields.idFromName('deviceIdentification')}"
+                           th:classappend="${#fields.hasErrors('deviceIdentification')}?'invalid'">Seadme identifikaator</label>
+                    <input th:field="*{deviceIdentification}"
+                           type="text"
+                           maxlength="100"
+                           class="form-control"/>
+                </div>
+                <button type="submit" class="btn btn-default">Sisesta uus seade!</button>
+            </form>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Kasutaja sisestus</div>
+        <div class="panel-body">
+            <!--/*@thymesVar id="userDTO" type="ee.scanner.tablet.dto.UserDTO"*/-->
+            <form th:action="@{/insert_user}" method="post" th:object="${userDTO}">
+                <div class="form-group">
+                    <label th:for="${#fields.idFromName('firstName')}"
+                           th:classappend="${#fields.hasErrors('firstName')}?'invalid'">Eesnimi</label>
+                    <input type="text"
+                           th:field="*{firstName}"
+                           maxlength="50"
+                           class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label th:for="${#fields.idFromName('lastName')}"
+                           th:classappend="${#fields.hasErrors('lastName')}?'invalid'">Perenimi</label>
+                    <input type="text"
+                           th:field="*{lastName}"
+                           maxlength="50"
+                           class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label th:for="${#fields.idFromName('pin')}"
+                           th:classappend="${#fields.hasErrors('pin')}?'invalid'">PIN</label>
+                    <input type="text"
+                           th:field="*{pin}"
+                           maxlength="10"
+                           class="form-control"/>
+                </div>
+                <button type="submit" class="btn btn-default">Sisesta uus kasutaja!</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
