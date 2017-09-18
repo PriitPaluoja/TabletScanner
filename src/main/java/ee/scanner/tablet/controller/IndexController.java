@@ -11,4 +11,9 @@ public class IndexController {
     public String scanPage(@ModelAttribute("registerDTO") RegisterDTO dto) {
         return "scan";
     }
+
+    @GetMapping(value = "/login")
+    public String loginPage() {
+        return "login";
+    }
 }

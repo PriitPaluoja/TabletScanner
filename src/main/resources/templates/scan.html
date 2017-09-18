@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html lang="et" xmlns:th="http://www.thymeleaf.org">
+<html lang="et" xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>THMK Tahvelarvutite laenutus</title>
     <meta charset="UTF-8"/>
@@ -21,6 +21,13 @@
                 <a class="navbar-brand" href="#">Tahvelarvuti laenutussüsteem</a>
             </div>
         </div>
+        <ul class="nav navbar-nav">
+            <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/insert}">Sisesta andmeid</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Logi sisse</a></li>
+            <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logi välja(<span sec:authentication="name" class="admin-name">[user]</span>)</a></li>
+        </ul>
     </nav>
 
     <!--/*@thymesVar id="feedbackList" type="java.util.List<ee.scanner.tablet.feedback.Feedback>"*/-->
