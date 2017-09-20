@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="et" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>THMK Tahvelarvutite laenutus</title>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" th:href="@{/main.css}"/>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-default navbar-masing-photo">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <img class="navbar-brand img-rounded" src="http://masing.tartu.ee//images/Pildid/Logod/THMK_logo.png" alt="THMK"/>
+                <a class="navbar-brand" th:href="@{/}">Tahvelarvuti laenutussüsteem</a>
+            </div>
+        </div>
+        <ul class="nav navbar-nav">
+            <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/insert}">Sisesta andmeid</a></li>
+            <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/stat}">Statistika</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Logi sisse</a></li>
+            <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logi välja (<span sec:authentication="name" class="admin-name">[user]</span>)</a></li>
+        </ul>
+    </nav>
+
+    <!--/*@thymesVar id="feedbackList" type="java.util.List<ee.scanner.tablet.feedback.Feedback>"*/-->
+    <div th:replace="fragments/feedback :: feedback-messages (feedbackList=${feedbackList})"></div>
+
+    <!--/*@thymesVar id="rentals" type="java.util.List<ee.scanner.tablet.dto.RentalDTO>"*/-->
+    <div th:each="rent : ${rentals}">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Seade</th>
+                <th>Eesnimi</th>
+                <th>Perenimi</th>
+            </tr>
+            </thead>
+            <!--/*@thymesVar id="rentals" type="java.util.List<ee.scanner.tablet.dto.RentalDTO>"*/-->
+            <tbody th:each="device : ${rent.getDevices()}">
+            <tr>
+                <td th:text="${device.getIdent()}"></td>
+                <td th:text="${rent.getUser().getFirstName()}"></td>
+                <td th:text="${rent.getUser().getLastName()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+</body>
+</html>
