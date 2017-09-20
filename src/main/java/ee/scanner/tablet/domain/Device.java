@@ -22,4 +22,19 @@ public class Device {
     private Integer id;
 
     private String ident;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Device device = (Device) o;
+
+        return ident != null ? ident.equals(device.ident) : device.ident == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return ident != null ? ident.hashCode() : 0;
+    }
 }

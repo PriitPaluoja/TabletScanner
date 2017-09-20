@@ -2,6 +2,8 @@ package ee.scanner.tablet.controller;
 
 import ee.scanner.tablet.dto.DeviceDTO;
 import ee.scanner.tablet.dto.UserDTO;
+import ee.scanner.tablet.exception.DeviceDuplicateException;
+import ee.scanner.tablet.exception.PinDuplicateException;
 import ee.scanner.tablet.feedback.FeedbackType;
 import ee.scanner.tablet.service.DataSaveService;
 import ee.scanner.tablet.util.ControllerUtil;
@@ -35,8 +37,12 @@ public class DataController {
         if (bindingResult.hasErrors()) {
             ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Seadme identifikaator ei ole korrektne!");
         } else {
-            dataSaveService.saveDevice(deviceDTO);
-            ControllerUtil.setFeedback(model, FeedbackType.SUCCESS, "Seade salvestatud!");
+            try {
+                dataSaveService.saveDevice(deviceDTO);
+                ControllerUtil.setFeedback(model, FeedbackType.SUCCESS, "Seade salvestatud!");
+            } catch (DeviceDuplicateException e) {
+                ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Seade juba eksisteerib!");
+            }
         }
         return "insert";
     }
@@ -48,8 +54,12 @@ public class DataController {
         if (bindingResult.hasErrors()) {
             ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Kasutajaga seotud andmed ei ole korreksed!");
         } else {
-            dataSaveService.saveUser(userDTO);
-            ControllerUtil.setFeedback(model, FeedbackType.SUCCESS, "Uus kasutaja salvestatud!");
+            try {
+                dataSaveService.saveUser(userDTO);
+                ControllerUtil.setFeedback(model, FeedbackType.SUCCESS, "Uus kasutaja salvestatud!");
+            } catch (PinDuplicateException e) {
+                ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Antud PIN on juba kasutusel! Vali uus PIN!");
+            }
         }
         return "insert";
     }
