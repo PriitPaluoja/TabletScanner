@@ -12,7 +12,7 @@ import javax.persistence.Id;
 @Getter
 @Setter
 @Entity
-public class User {
+public class DeviceUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

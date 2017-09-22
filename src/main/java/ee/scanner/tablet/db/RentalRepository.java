@@ -9,5 +9,7 @@ import java.util.List;
 public interface RentalRepository extends JpaRepository<Rental, Integer> {
     List<Rental> findByUserPinAndIsReturned(String userPin, Boolean isReturned);
 
+    Rental findByDeviceIdentAndIsReturned(String ident, Boolean isReturned);
+
     List<Rental> findByIsReturned(Boolean isReturned);
 }

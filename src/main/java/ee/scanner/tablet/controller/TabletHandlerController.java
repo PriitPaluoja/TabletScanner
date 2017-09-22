@@ -30,7 +30,7 @@ public class TabletHandlerController {
                     rentalService.takeDevices(dto);
                     ControllerUtil.setFeedback(model, FeedbackType.SUCCESS, "Seadmed väljastatud");
                 } catch (NoSuchElementException e) {
-                    ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Sisestatud PIN ei ole õige!");
+                    ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Sisestatud PIN-iga kasutajat ei leitud!");
                 }
                 break;
             case "return":

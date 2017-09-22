@@ -34,26 +34,31 @@
     <!--/*@thymesVar id="feedbackList" type="java.util.List<ee.scanner.tablet.feedback.Feedback>"*/-->
     <div th:replace="fragments/feedback :: feedback-messages (feedbackList=${feedbackList})"></div>
 
-    <!--/*@thymesVar id="rentals" type="java.util.List<ee.scanner.tablet.dto.RentalDTO>"*/-->
-    <div th:each="rent : ${rentals}">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th>Seade</th>
-                <th>Eesnimi</th>
-                <th>Perenimi</th>
-            </tr>
-            </thead>
-            <!--/*@thymesVar id="rentals" type="java.util.List<ee.scanner.tablet.dto.RentalDTO>"*/-->
-            <tbody th:each="device : ${rent.getDevices()}">
-            <tr>
-                <td th:text="${device.getIdent()}"></td>
-                <td th:text="${rent.getUser().getFirstName()}"></td>
-                <td th:text="${rent.getUser().getLastName()}"></td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="panel panel-default">
+        <div class="panel-heading">Välja laenutatud seadmed</div>
+        <div class="panel-body">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Seade</th>
+                    <th>Eesnimi</th>
+                    <th>Perenimi</th>
+                    <th>Laenutuse algus</th>
+                </tr>
+                </thead>
+                <!--/*@thymesVar id="rentals" type="java.util.List<ee.scanner.tablet.dto.RentalDTO>"*/-->
+                <tbody th:each="rent : ${rentals}">
+                <tr>
+                    <td th:text="${rent.getDevices().getDeviceIdentification()}"></td>
+                    <td th:text="${rent.getUser().getFirstName()}"></td>
+                    <td th:text="${rent.getUser().getLastName()}"></td>
+                    <td th:text="${rent.getRentalTime().toString()}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+
 </div>
 
 

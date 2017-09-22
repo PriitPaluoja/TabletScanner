@@ -1,10 +1,10 @@
 package ee.scanner.tablet.db;
 
-import ee.scanner.tablet.domain.User;
+import ee.scanner.tablet.domain.DeviceUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Integer> {
-    Optional<User> findByPin(String pin);
+public interface UserRepository extends JpaRepository<DeviceUser, Integer> {
+    Optional<DeviceUser> findByPin(String pin);
 }

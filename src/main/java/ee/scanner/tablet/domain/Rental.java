@@ -7,8 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,16 +20,20 @@ public class Rental {
     private Integer id;
 
     @JoinColumn(name = "user_id")
-    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE})
-    private User user;
+    @ManyToOne
+    private DeviceUser user;
 
     @JoinColumn(name = "device_id")
-    @OneToMany(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Device> devices = new ArrayList<>();
+    @ManyToOne
+    private Device device;
 
     private LocalDateTime rentalTime;
 
     private LocalDateTime returnTime;
 
     private Boolean isReturned;
+
+    @JoinColumn(name = "returner")
+    @ManyToOne
+    private DeviceUser returner;
 }

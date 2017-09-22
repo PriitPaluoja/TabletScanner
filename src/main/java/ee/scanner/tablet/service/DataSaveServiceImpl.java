@@ -4,7 +4,7 @@ import ee.scanner.tablet.db.DeviceRepository;
 import ee.scanner.tablet.db.RentalRepository;
 import ee.scanner.tablet.db.UserRepository;
 import ee.scanner.tablet.domain.Device;
-import ee.scanner.tablet.domain.User;
+import ee.scanner.tablet.domain.DeviceUser;
 import ee.scanner.tablet.dto.DeviceDTO;
 import ee.scanner.tablet.dto.RentalDTO;
 import ee.scanner.tablet.dto.UserDTO;
@@ -38,7 +38,7 @@ public class DataSaveServiceImpl implements DataSaveService {
         if (userRepository.findByPin(userDTO.getPin()).isPresent()) {
             throw new PinDuplicateException();
         }
-        userRepository.save(new User(null, userDTO.getFirstName(), userDTO.getLastName(), userDTO.getPin()));
+        userRepository.save(new DeviceUser(null, userDTO.getFirstName(), userDTO.getLastName(), userDTO.getPin()));
     }
 
     @Override
@@ -46,11 +46,12 @@ public class DataSaveServiceImpl implements DataSaveService {
         return rentalRepository.findByIsReturned(false).stream()
                 .map(e -> new RentalDTO(
                                 e.getId(),
-                                e.getUser(),
-                                e.getDevices(),
+                                new UserDTO(e.getUser().getFirstName(), e.getUser().getLastName(), e.getUser().getPin()),
+                                new DeviceDTO(e.getDevice().getIdent()),
                                 e.getRentalTime(),
                                 e.getReturnTime(),
-                                e.getIsReturned()
+                                e.getIsReturned(),
+                                new UserDTO(e.getUser().getFirstName(), e.getUser().getLastName(), e.getUser().getPin())
                         )
                 ).collect(Collectors.toList());
     }
