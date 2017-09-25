@@ -46,8 +46,10 @@ public class RentalServiceImpl implements RentalService {
         lst.stream()
                 .map(e -> rentalRepository.findByDeviceIdentAndIsReturned(e.getIdent(), false))
                 .forEach(e -> {
-                    e.setIsReturned(true);
-                    rentalRepository.save(e);
+                    if (e != null) {
+                        e.setIsReturned(true);
+                        rentalRepository.save(e);
+                    }
                 });
 
         if (lst.isEmpty()) throw new NoDeviceFoundException();

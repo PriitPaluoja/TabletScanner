@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>THMK Tahvelarvutite laenutus: admin</title>
     <meta charset="UTF-8"/>
@@ -13,23 +13,7 @@
 </head>
 <body>
 <div class="container">
-    <nav class="navbar navbar-default navbar-masing-photo">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <img class="navbar-brand img-rounded" src="http://masing.tartu.ee//images/Pildid/Logod/THMK_logo.png" alt="THMK"/>
-                <a class="navbar-brand" th:href="@{/}">Tahvelarvuti laenutussüsteem</a>
-            </div>
-        </div>
-        <ul class="nav navbar-nav">
-            <li sec:authorize="isAuthenticated()"><a th:href="@{/}">Laenuta</a></li>
-            <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/insert}">Sisesta andmeid</a></li>
-            <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/stat}">Statistika</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Logi sisse</a></li>
-            <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logi välja (<span sec:authentication="name" class="admin-name">[user]</span>)</a></li>
-        </ul>
-    </nav>
+    <div th:replace="fragments/feedback :: navbar"></div>
 
     <!--/*@thymesVar id="feedbackList" type="java.util.List<ee.scanner.tablet.feedback.Feedback>"*/-->
     <div th:replace="fragments/feedback :: feedback-messages (feedbackList=${feedbackList})"></div>
