@@ -3,10 +3,13 @@ package ee.scanner.tablet.service;
 import ee.scanner.tablet.db.DeviceRepository;
 import ee.scanner.tablet.db.RentalRepository;
 import ee.scanner.tablet.db.UserRepository;
+import ee.scanner.tablet.domain.Device;
 import ee.scanner.tablet.domain.DeviceUser;
 import ee.scanner.tablet.domain.Rental;
 import ee.scanner.tablet.dto.RegisterDTO;
 import ee.scanner.tablet.exception.NoActiveRentalsFoundException;
+import ee.scanner.tablet.exception.NoDeviceFoundException;
+import ee.scanner.tablet.exception.NoUserFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,33 +30,47 @@ public class RentalServiceImpl implements RentalService {
     private final DeviceRepository deviceRepository;
 
     @Override
-    public void takeDevices(RegisterDTO dto) throws NoSuchElementException {
+    public void takeDevices(RegisterDTO dto) throws NoUserFoundException, NoDeviceFoundException {
         DeviceUser user = userRepository.findByPin(dto.getPersonInformation()).orElse(null);
+        if (user == null) throw new NoUserFoundException();
+
         LocalDateTime timestamp = LocalDateTime.now();
 
-        if (user == null) throw new NoSuchElementException();
-
         // Find all devices from database
-        Arrays.stream(dto.getDevices().split(RENTAL_DEVICE_SEPARATOR))
+        List<Device> lst = Arrays.stream(dto.getDevices().split(RENTAL_DEVICE_SEPARATOR))
                 .map(String::trim)
                 .map(deviceRepository::findDeviceByIdent)
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList())
-                .forEach(device -> rentalRepository.save(new Rental(null, user, device, timestamp, null, false, null)));
+                .collect(Collectors.toList());
+
+        lst.stream()
+                .map(e -> rentalRepository.findByDeviceIdentAndIsReturned(e.getIdent(), false))
+                .forEach(e -> {
+                    e.setIsReturned(true);
+                    rentalRepository.save(e);
+                });
+
+        if (lst.isEmpty()) throw new NoDeviceFoundException();
+
+        lst.forEach(device -> rentalRepository.save(new Rental(null, user, device, timestamp, null, false, null)));
     }
 
     @Override
-    public void returnDevices(RegisterDTO dto) throws NoSuchElementException, NoActiveRentalsFoundException {
+    public void returnDevices(RegisterDTO dto) throws NoSuchElementException, NoActiveRentalsFoundException, NoUserFoundException {
         // Find all devices from database
         List<Rental> rentals = Arrays.stream(dto.getDevices().split(RENTAL_DEVICE_SEPARATOR))
                 .map(deviceRepository::findDeviceByIdent)
                 .map(e -> rentalRepository.findByDeviceIdentAndIsReturned(e.getIdent(), false))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         // Find all rentals regarding user
         if (rentals.isEmpty()) throw new NoActiveRentalsFoundException();
 
         DeviceUser user = userRepository.findByPin(dto.getPersonInformation().trim()).orElse(null);
+
+        if (user == null) throw new NoUserFoundException();
+
         LocalDateTime timestamp = LocalDateTime.now();
 
         for (Rental rental : rentals) {

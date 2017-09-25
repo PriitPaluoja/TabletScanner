@@ -22,6 +22,7 @@
             </div>
         </div>
         <ul class="nav navbar-nav">
+            <li sec:authorize="isAuthenticated()"><a th:href="@{/}">Laenuta</a></li>
             <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/insert}">Sisesta andmeid</a></li>
             <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/stat}">Statistika</a></li>
         </ul>
