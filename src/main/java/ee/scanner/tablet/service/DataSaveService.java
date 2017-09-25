@@ -13,5 +13,7 @@ public interface DataSaveService {
 
     void saveUser(UserDTO userDTO) throws PinDuplicateException;
 
+    List<RentalDTO> getActiveRentals();
+
     List<RentalDTO> getAllRentals();
 }

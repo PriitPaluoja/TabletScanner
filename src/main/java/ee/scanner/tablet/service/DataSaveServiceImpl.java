@@ -42,9 +42,24 @@ public class DataSaveServiceImpl implements DataSaveService {
     }
 
     @Override
-    public List<RentalDTO> getAllRentals() {
+    public List<RentalDTO> getActiveRentals() {
         return rentalRepository.findByIsReturned(false).stream()
                 .map(e -> new RentalDTO(
+                                e.getId(),
+                                new UserDTO(e.getUser().getFirstName(), e.getUser().getLastName(), e.getUser().getPin()),
+                                new DeviceDTO(e.getDevice().getIdent()),
+                                e.getRentalTime(),
+                                e.getReturnTime(),
+                                e.getIsReturned(),
+                                new UserDTO(e.getUser().getFirstName(), e.getUser().getLastName(), e.getUser().getPin())
+                        )
+                ).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<RentalDTO> getAllRentals() {
+        return rentalRepository.findAll()
+                .stream().map(e -> new RentalDTO(
                                 e.getId(),
                                 new UserDTO(e.getUser().getFirstName(), e.getUser().getLastName(), e.getUser().getPin()),
                                 new DeviceDTO(e.getDevice().getIdent()),

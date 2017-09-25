@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html lang="et" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="et" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>THMK Tahvelarvutite laenutus</title>
     <meta charset="UTF-8"/>
@@ -14,7 +14,6 @@
 <body>
 <div class="container">
     <div th:replace="fragments/feedback :: navbar"></div>
-
 
     <!--/*@thymesVar id="feedbackList" type="java.util.List<ee.scanner.tablet.feedback.Feedback>"*/-->
     <div th:replace="fragments/feedback :: feedback-messages (feedbackList=${feedbackList})"></div>
@@ -37,7 +36,40 @@
                     <td th:text="${rent.getDevices().getDeviceIdentification()}"></td>
                     <td th:text="${rent.getUser().getFirstName()}"></td>
                     <td th:text="${rent.getUser().getLastName()}"></td>
-                    <td th:text="${rent.getRentalTime().toString()}"></td>
+                    <td th:text="${rent.getRentalTime()} ? ${#temporals.format(rent.getRentalTime(),'dd.MM.yyyy HH:mm:ss')}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Laenutuste ajalugu</div>
+        <div class="panel-body">
+            <table id="rentals_history" class="table table-hover display">
+                <thead>
+                <tr>
+                    <th>Seade</th>
+                    <th>Laenutaja eesnimi</th>
+                    <th>Laenutaja perenimi</th>
+                    <th>Laenutuse algus</th>
+                    <th>Laenutuse lõpp</th>
+                    <th>Tagastaja eesnimi</th>
+                    <th>Tagastaja perenimi</th>
+                    <th>Tagastatud?</th>
+                </tr>
+                </thead>
+                <!--/*@thymesVar id="rentalsHistory" type="java.util.List<ee.scanner.tablet.dto.RentalDTO>"*/-->
+                <tbody th:each="hist : ${rentalsHistory}">
+                <tr>
+                    <td th:text="${hist.getDevices().getDeviceIdentification()}"></td>
+                    <td th:text="${hist.getUser().getFirstName()}"></td>
+                    <td th:text="${hist.getUser().getLastName()}"></td>
+                    <td th:text="${hist.getRentalTime()} ? ${#temporals.format(hist.getRentalTime(),'dd.MM.yyyy HH:mm:ss')}"></td>
+                    <td th:text="${hist.getReturnTime()} ? ${#temporals.format(hist.getReturnTime(),'dd.MM.yyyy HH:mm:ss')}"></td>
+                    <td th:text="${hist.getReturner().getFirstName()}"></td>
+                    <td th:text="${hist.getReturner().getLastName()}"></td>
+                    <td th:text="${hist.getIsReturned() ? ' ✔' :'✗'}"></td>
                 </tr>
                 </tbody>
             </table>

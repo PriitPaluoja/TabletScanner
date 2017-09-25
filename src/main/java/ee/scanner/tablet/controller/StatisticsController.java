@@ -14,7 +14,8 @@ public class StatisticsController {
 
     @GetMapping("/stat")
     public String statisticsPage(Model model) {
-        model.addAttribute("rentals", dataSaveService.getAllRentals());
+        model.addAttribute("rentals", dataSaveService.getActiveRentals());
+        model.addAttribute("rentalsHistory", dataSaveService.getAllRentals());
         return "stat";
     }
 }
