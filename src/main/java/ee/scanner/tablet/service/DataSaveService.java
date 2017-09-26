@@ -16,4 +16,8 @@ public interface DataSaveService {
     List<RentalDTO> getActiveRentals();
 
     List<RentalDTO> getAllRentals();
+
+    List<UserDTO> getAllUsers();
+
+    List<DeviceDTO> getAllDevices();
 }

@@ -24,6 +24,8 @@
         <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/insert}">Sisesta andmeid</a></li>
         <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/stat}">Statistika</a></li>
         <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/history}">Ajalugu</a></li>
+        <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/users}">Kasutajad</a></li>
+        <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/devices}">Seadmed</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
         <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Logi sisse</a></li>

@@ -13,8 +13,10 @@ $(document).ready(function () {
     //
 
     // In details and add page: covert assignable questions table to the Datatable
-    //$('#rentals').DataTable();
+    $('#rentals').DataTable();
     $('#rentals_history').DataTable();
+    $('#usrs').DataTable();
+    $('#devs').DataTable();
 
 
     // // Search box autocomplete

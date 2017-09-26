@@ -70,4 +70,17 @@ public class DataSaveServiceImpl implements DataSaveService {
                         )
                 ).collect(Collectors.toList());
     }
+
+    @Override
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(e -> new UserDTO(e.getFirstName(), e.getLastName(), e.getPin()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<DeviceDTO> getAllDevices() {
+        return deviceRepository.findAll().stream()
+                .map(e -> new DeviceDTO(e.getIdent())).collect(Collectors.toList());
+    }
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="et" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>THMK Tahvelarvutite laenutus</title>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" th:href="@{/css/external.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <script th:src="@{/js/external.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+</head>
+<body>
+<div class="container">
+    <div th:replace="fragments/feedback :: navbar"></div>
+
+    <!--/*@thymesVar id="feedbackList" type="java.util.List<ee.scanner.tablet.feedback.Feedback>"*/-->
+    <div th:replace="fragments/feedback :: feedback-messages (feedbackList=${feedbackList})"></div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Seadmed</div>
+        <div class="panel-body">
+            <table id="devs" class="table table-hover display">
+                <thead>
+                <tr>
+                    <th>Idendifikaator</th>
+                </tr>
+                </thead>
+                <!--/*@thymesVar id="devices" type="java.util.List<ee.scanner.tablet.dto.DeviceDTO>"*/-->
+                <tbody>
+                <tr th:each="dev : ${devices}">
+                    <td th:text="${dev.getDeviceIdentification()}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
