@@ -83,7 +83,7 @@ public class DataController {
             }
         }
 
-        model.addAttribute("devices", dataSaveService.getAllDevices());
+        model.addAttribute("users", dataSaveService.getAllUsers());
         return "users";
     }
 }
