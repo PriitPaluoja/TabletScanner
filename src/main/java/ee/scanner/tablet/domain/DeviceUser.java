@@ -21,4 +21,5 @@ public class DeviceUser {
     private String firstName;
     private String lastName;
     private String pin;
+    private Boolean active;
 }

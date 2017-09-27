@@ -2,7 +2,9 @@ package ee.scanner.tablet.controller;
 
 import ee.scanner.tablet.dto.DeviceDTO;
 import ee.scanner.tablet.dto.UserDTO;
+import ee.scanner.tablet.dto.UserWrapperDTO;
 import ee.scanner.tablet.exception.DeviceDuplicateException;
+import ee.scanner.tablet.exception.IdNotPresentException;
 import ee.scanner.tablet.exception.PinDuplicateException;
 import ee.scanner.tablet.feedback.FeedbackType;
 import ee.scanner.tablet.service.DataSaveService;
@@ -64,5 +66,24 @@ public class DataController {
             }
         }
         return "insert";
+    }
+
+    @PostMapping("/update_user")
+    public String updateUser(@Valid @ModelAttribute("users") UserWrapperDTO dto,
+                             BindingResult bindingResult,
+                             Model model) {
+        if (bindingResult.hasErrors()) {
+            ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Sisestatud andmed ei ole korreksed!");
+        } else {
+            try {
+                dataSaveService.updateUsers(dto);
+                ControllerUtil.setFeedback(model, FeedbackType.SUCCESS, "Kasutaja uuendatud!");
+            } catch (IdNotPresentException e) {
+                ControllerUtil.setFeedback(model, FeedbackType.SUCCESS, "Kasutajat ei leitud andmebaasist!");
+            }
+        }
+
+        model.addAttribute("devices", dataSaveService.getAllDevices());
+        return "users";
     }
 }
