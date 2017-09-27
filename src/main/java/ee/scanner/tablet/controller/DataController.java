@@ -7,6 +7,7 @@ import ee.scanner.tablet.dto.UserWrapperDTO;
 import ee.scanner.tablet.exception.DeviceDuplicateException;
 import ee.scanner.tablet.exception.IdNotPresentException;
 import ee.scanner.tablet.exception.PinDuplicateException;
+import ee.scanner.tablet.exception.PinNotPresentException;
 import ee.scanner.tablet.feedback.FeedbackType;
 import ee.scanner.tablet.service.DataSaveService;
 import ee.scanner.tablet.util.ControllerUtil;
@@ -72,8 +73,8 @@ public class DataController {
 
     @PostMapping("/update_user")
     public String updateUsers(@Valid @ModelAttribute("users") UserWrapperDTO dto,
-                             BindingResult bindingResult,
-                             Model model) {
+                              BindingResult bindingResult,
+                              Model model) {
         if (bindingResult.hasErrors()) {
             ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Sisestatud andmed ei ole korreksed!");
         } else {
@@ -81,7 +82,11 @@ public class DataController {
                 dataSaveService.updateUsers(dto);
                 ControllerUtil.setFeedback(model, FeedbackType.SUCCESS, "Kasutaja uuendatud!");
             } catch (IdNotPresentException e) {
-                ControllerUtil.setFeedback(model, FeedbackType.SUCCESS, "Kasutajat ei leitud andmebaasist!");
+                ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Kasutajat ei leitud andmebaasist!");
+            } catch (PinNotPresentException e) {
+                ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Aktiivsel kasutajal on PIN-kood kohustuslik!");
+            } catch (PinDuplicateException e) {
+                ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Sisestatud PIN-kood ei ole unikaalne!");
             }
         }
 
@@ -91,8 +96,8 @@ public class DataController {
 
     @PostMapping("/update_devices")
     public String updateDevices(@Valid @ModelAttribute("devices") DeviceWrapperDTO dto,
-                             BindingResult bindingResult,
-                             Model model) {
+                                BindingResult bindingResult,
+                                Model model) {
         if (bindingResult.hasErrors()) {
             ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Sisestatud seadmed ei ole korreksed!");
         } else {
@@ -100,7 +105,9 @@ public class DataController {
                 dataSaveService.updateDevices(dto);
                 ControllerUtil.setFeedback(model, FeedbackType.SUCCESS, "Seade uuendatud!");
             } catch (IdNotPresentException e) {
-                ControllerUtil.setFeedback(model, FeedbackType.SUCCESS, "Seadet ei leitud andmebaasist!");
+                ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Seadet ei leitud andmebaasist!");
+            } catch (DeviceDuplicateException e) {
+                ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Sisestatud identifikaator on juba andmebaasis!");
             }
         }
 

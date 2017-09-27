@@ -9,6 +9,7 @@ import ee.scanner.tablet.dto.*;
 import ee.scanner.tablet.exception.DeviceDuplicateException;
 import ee.scanner.tablet.exception.IdNotPresentException;
 import ee.scanner.tablet.exception.PinDuplicateException;
+import ee.scanner.tablet.exception.PinNotPresentException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,7 +78,7 @@ public class DataSaveServiceImpl implements DataSaveService {
     @Override
     public UserWrapperDTO getAllUsers() {
         return new UserWrapperDTO(userRepository.findAll().stream()
-                .map(e -> new UserDTO(e.getId(), e.getFirstName(), e.getLastName(), e.getPin(), e.getActive()))
+                .map(e -> new UserManagementDTO(e.getId(), e.getFirstName(), e.getLastName(), e.getPin(), e.getActive()))
                 .collect(Collectors.toList()));
     }
 
@@ -88,26 +89,30 @@ public class DataSaveServiceImpl implements DataSaveService {
     }
 
     @Override
-    public void updateUsers(UserWrapperDTO dto) throws IdNotPresentException {
+    public void updateUsers(UserWrapperDTO dto) throws IdNotPresentException, PinNotPresentException, PinDuplicateException {
         List<DeviceUser> fromFrontEnd = dto.getUsers().stream()
                 .map(e -> new DeviceUser(e.getId(), e.getFirstName(), e.getLastName(), e.getPin(), e.getActive()))
                 .collect(Collectors.toList());
 
         for (DeviceUser fromFront : fromFrontEnd) {
             DeviceUser fromDb = userRepository.findOne(fromFront.getId());
+
+
             if (fromDb == null) {
                 throw new IdNotPresentException();
             } else {
-                if (!fromFront.getActive()) {
-                    fromFront.setPin(null);
-                }
+                if (fromFront.getPin().isEmpty()) throw new PinNotPresentException();
+                if (!fromFront.getPin().equals(fromDb.getPin()) && userRepository.findByPin(fromFront.getPin()).isPresent())
+                    throw new PinDuplicateException();
+
+                if (!fromFront.getActive()) fromFront.setPin(null);
                 userRepository.save(fromFront);
             }
         }
     }
 
     @Override
-    public void updateDevices(DeviceWrapperDTO dto) throws IdNotPresentException {
+    public void updateDevices(DeviceWrapperDTO dto) throws IdNotPresentException, DeviceDuplicateException {
         List<Device> fromFrontEnd = dto.getDevices().stream()
                 .map(e -> new Device(e.getId(), e.getDeviceIdentification(), e.getActive()))
                 .collect(Collectors.toList());
@@ -117,8 +122,14 @@ public class DataSaveServiceImpl implements DataSaveService {
 
             if (fromDb == null)
                 throw new IdNotPresentException();
-            else
+            else {
+                //TODO: check duplicates
+
+                if (!fromFront.getIdent().equals(fromDb.getIdent()) && deviceRepository.findDeviceByIdent(fromFront.getIdent()) != null)
+                    throw new DeviceDuplicateException();
+
                 deviceRepository.save(fromFront);
+            }
         }
     }
 }

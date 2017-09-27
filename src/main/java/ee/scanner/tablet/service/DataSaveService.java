@@ -4,6 +4,7 @@ import ee.scanner.tablet.dto.*;
 import ee.scanner.tablet.exception.DeviceDuplicateException;
 import ee.scanner.tablet.exception.IdNotPresentException;
 import ee.scanner.tablet.exception.PinDuplicateException;
+import ee.scanner.tablet.exception.PinNotPresentException;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface DataSaveService {
 
     DeviceWrapperDTO getAllDevices();
 
-    void updateUsers(UserWrapperDTO dto) throws IdNotPresentException;
+    void updateUsers(UserWrapperDTO dto) throws IdNotPresentException, PinNotPresentException, PinDuplicateException;
 
-    void updateDevices(DeviceWrapperDTO dto) throws IdNotPresentException;
+    void updateDevices(DeviceWrapperDTO dto) throws IdNotPresentException, DeviceDuplicateException;
 }

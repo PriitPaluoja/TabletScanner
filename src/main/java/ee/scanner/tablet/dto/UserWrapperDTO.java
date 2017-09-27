@@ -14,5 +14,5 @@ import java.util.List;
 public class UserWrapperDTO {
 
     @Valid
-    private List<UserDTO> users = new ArrayList<>();
+    private List<UserManagementDTO> users = new ArrayList<>();
 }
