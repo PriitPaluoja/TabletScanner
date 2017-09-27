@@ -6,6 +6,7 @@ CREATE TABLE public.device_user (
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
   pin VARCHAR(10),
+  active BOOLEAN NOT NULL,
   CONSTRAINT device_user_pk PRIMARY KEY (id)
 );
 
@@ -27,9 +28,12 @@ CREATE SEQUENCE public.rental_id_seq;
 
 CREATE TABLE public.rental (
   id INTEGER NOT NULL DEFAULT nextval('public.rental_id_seq'),
-  user_id INTEGER NOT NULL,
+  user_id INTEGER,
   device_id INTEGER NOT NULL,
   rental_time TIMESTAMP NOT NULL,
+  return_time TIMESTAMP,
+  is_returned BOOLEAN NOT NULL,
+  returner INTEGER,
   CONSTRAINT rental_pk PRIMARY KEY (id)
 );
 
@@ -42,6 +46,13 @@ REFERENCES public.device_user (id)
 ON DELETE NO ACTION
 ON UPDATE CASCADE
   NOT DEFERRABLE;
+
+ALTER TABLE public.rental ADD CONSTRAINT device_user_rental_fk
+FOREIGN KEY (returner)
+REFERENCES public.device_user (id)
+ON DELETE NO ACTION
+ON UPDATE CASCADE
+  DEFERRABLE INITIALLY DEFERRED;
 
 ALTER TABLE public.rental ADD CONSTRAINT device_rental_fk
 FOREIGN KEY (device_id)
