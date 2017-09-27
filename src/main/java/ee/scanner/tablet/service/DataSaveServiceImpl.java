@@ -5,10 +5,7 @@ import ee.scanner.tablet.db.RentalRepository;
 import ee.scanner.tablet.db.UserRepository;
 import ee.scanner.tablet.domain.Device;
 import ee.scanner.tablet.domain.DeviceUser;
-import ee.scanner.tablet.dto.DeviceDTO;
-import ee.scanner.tablet.dto.RentalDTO;
-import ee.scanner.tablet.dto.UserDTO;
-import ee.scanner.tablet.dto.UserWrapperDTO;
+import ee.scanner.tablet.dto.*;
 import ee.scanner.tablet.exception.DeviceDuplicateException;
 import ee.scanner.tablet.exception.IdNotPresentException;
 import ee.scanner.tablet.exception.PinDuplicateException;
@@ -31,7 +28,7 @@ public class DataSaveServiceImpl implements DataSaveService {
         if (deviceRepository.findDeviceByIdent(deviceDTO.getDeviceIdentification()) != null) {
             throw new DeviceDuplicateException();
         }
-        deviceRepository.save(new Device(null, deviceDTO.getDeviceIdentification()));
+        deviceRepository.save(new Device(null, deviceDTO.getDeviceIdentification(), true));
     }
 
     @Override
@@ -53,7 +50,7 @@ public class DataSaveServiceImpl implements DataSaveService {
                 .map(e -> new RentalDTO(
                                 e.getId(),
                                 new UserDTO(e.getId(), e.getUser().getFirstName(), e.getUser().getLastName(), e.getUser().getPin(), e.getUser().getActive()),
-                                new DeviceDTO(e.getDevice().getIdent()),
+                                new DeviceDTO(e.getId(), e.getDevice().getIdent(), e.getDevice().getActive()),
                                 e.getRentalTime(),
                                 e.getReturnTime(),
                                 e.getIsReturned(),
@@ -68,7 +65,7 @@ public class DataSaveServiceImpl implements DataSaveService {
                 .stream().map(e -> new RentalDTO(
                                 e.getId(),
                                 new UserDTO(e.getId(), e.getUser().getFirstName(), e.getUser().getLastName(), e.getUser().getPin(), e.getUser().getActive()),
-                                new DeviceDTO(e.getDevice().getIdent()),
+                                new DeviceDTO(e.getId(), e.getDevice().getIdent(), e.getDevice().getActive()),
                                 e.getRentalTime(),
                                 e.getReturnTime(),
                                 e.getIsReturned(),
@@ -85,9 +82,9 @@ public class DataSaveServiceImpl implements DataSaveService {
     }
 
     @Override
-    public List<DeviceDTO> getAllDevices() {
-        return deviceRepository.findAll().stream()
-                .map(e -> new DeviceDTO(e.getIdent())).collect(Collectors.toList());
+    public DeviceWrapperDTO getAllDevices() {
+        return new DeviceWrapperDTO(deviceRepository.findAll().stream()
+                .map(e -> new DeviceDTO(e.getId(), e.getIdent(), e.getActive())).collect(Collectors.toList()));
     }
 
     @Override
@@ -106,6 +103,22 @@ public class DataSaveServiceImpl implements DataSaveService {
                 }
                 userRepository.save(fromFront);
             }
+        }
+    }
+
+    @Override
+    public void updateDevices(DeviceWrapperDTO dto) throws IdNotPresentException {
+        List<Device> fromFrontEnd = dto.getDevices().stream()
+                .map(e -> new Device(e.getId(), e.getDeviceIdentification(), e.getActive()))
+                .collect(Collectors.toList());
+
+        for (Device fromFront : fromFrontEnd) {
+            Device fromDb = deviceRepository.findOne(fromFront.getId());
+
+            if (fromDb == null)
+                throw new IdNotPresentException();
+            else
+                deviceRepository.save(fromFront);
         }
     }
 }

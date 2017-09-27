@@ -10,7 +10,12 @@ import org.hibernate.validator.constraints.NotBlank;
 @Setter
 @ToString
 public class DeviceDTO {
+
+    private Integer id;
+
     @Length(max = 100)
     @NotBlank
     private String deviceIdentification;
+
+    private Boolean active;
 }

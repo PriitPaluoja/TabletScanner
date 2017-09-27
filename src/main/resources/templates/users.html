@@ -58,8 +58,7 @@
                                                     <label th:for="${#fields.idFromName('firstName')}">Eesnimi:</label>
                                                     <input type="text"
                                                            class="form-control"
-                                                           th:field="*{users[__${int.index}__].firstName}"
-                                                           th:value="${usr.getFirstName()}"/>
+                                                           th:field="*{users[__${int.index}__].firstName}"/>
                                                 </div>
                                             </div>
 

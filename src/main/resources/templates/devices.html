@@ -18,24 +18,79 @@
     <!--/*@thymesVar id="feedbackList" type="java.util.List<ee.scanner.tablet.feedback.Feedback>"*/-->
     <div th:replace="fragments/feedback :: feedback-messages (feedbackList=${feedbackList})"></div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">Seadmed</div>
-        <div class="panel-body">
-            <table id="devs" class="table table-hover display">
-                <thead>
-                <tr>
-                    <th>Idendifikaator</th>
-                </tr>
-                </thead>
-                <!--/*@thymesVar id="devices" type="java.util.List<ee.scanner.tablet.dto.DeviceDTO>"*/-->
-                <tbody>
-                <tr th:each="dev : ${devices}">
-                    <td th:text="${dev.getDeviceIdentification()}"></td>
-                </tr>
-                </tbody>
-            </table>
+    <!--/*@thymesVar id="devices" type="ee.scanner.tablet.dto.DeviceWrapperDTO"*/-->
+    <form th:object="${devices}" th:action="@{/update_devices}" method="post">
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Seadmed</div>
+            <div class="panel-body">
+                <table id="devs" class="table table-hover display">
+                    <thead>
+                    <tr>
+                        <th>Idendifikaator</th>
+                        <th>Aktiivne</th>
+                        <th>Muuda</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="dev, int : ${devices.getDevices()}">
+                        <td th:text="${dev.getDeviceIdentification()}"></td>
+                        <td th:text="${dev.getActive() ? ' ✔' :'✗'}"></td>
+                        <td>
+                            <button type="button" class="btn btn-default" data-toggle="modal" th:attr="data-target='#modal'+${dev.getId()}">Muuda andmeid</button>
+                            <div th:id="'modal'+${dev.getId()}" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <div class="modal-title">Redigeeri kasutajat</div>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <input type="hidden" th:field="*{devices[__${int.index}__].id}"/>
+                                            </div>
+
+                                            <div class="panel panel-default">
+                                                <div class="panel-body form-group">
+                                                    <label th:for="${#fields.idFromName('deviceIdentification')}">Idenditifikaator:</label>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           th:field="*{devices[__${int.index}__].deviceIdentification}"/>
+                                                </div>
+                                            </div>
+                                            <div class="panel panel-default">
+                                                <div class="form-group panel-body">
+
+                                                    <label>Aktiivne:</label>
+                                                    <label class="radio-inline">
+                                                        <input th:field="*{devices[__${int.index}__].active}"
+                                                               type="radio"
+                                                               th:value="true"/>
+                                                        &#10004;
+                                                    </label>
+                                                    <label class="radio-inline">
+                                                        <input th:field="*{devices[__${int.index}__].active}"
+                                                               type="radio"
+                                                               th:value="false"/>
+                                                        &#10006;
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Uuenda</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
 </body>
 </html>

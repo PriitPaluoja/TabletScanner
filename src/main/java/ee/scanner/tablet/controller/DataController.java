@@ -1,6 +1,7 @@
 package ee.scanner.tablet.controller;
 
 import ee.scanner.tablet.dto.DeviceDTO;
+import ee.scanner.tablet.dto.DeviceWrapperDTO;
 import ee.scanner.tablet.dto.UserDTO;
 import ee.scanner.tablet.dto.UserWrapperDTO;
 import ee.scanner.tablet.exception.DeviceDuplicateException;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 
+@SuppressWarnings("Duplicates")
 @Controller
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @PreAuthorize("hasRole('ADMIN')")
@@ -69,7 +71,7 @@ public class DataController {
     }
 
     @PostMapping("/update_user")
-    public String updateUser(@Valid @ModelAttribute("users") UserWrapperDTO dto,
+    public String updateUsers(@Valid @ModelAttribute("users") UserWrapperDTO dto,
                              BindingResult bindingResult,
                              Model model) {
         if (bindingResult.hasErrors()) {
@@ -85,5 +87,24 @@ public class DataController {
 
         model.addAttribute("users", dataSaveService.getAllUsers());
         return "users";
+    }
+
+    @PostMapping("/update_devices")
+    public String updateDevices(@Valid @ModelAttribute("devices") DeviceWrapperDTO dto,
+                             BindingResult bindingResult,
+                             Model model) {
+        if (bindingResult.hasErrors()) {
+            ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Sisestatud seadmed ei ole korreksed!");
+        } else {
+            try {
+                dataSaveService.updateDevices(dto);
+                ControllerUtil.setFeedback(model, FeedbackType.SUCCESS, "Seade uuendatud!");
+            } catch (IdNotPresentException e) {
+                ControllerUtil.setFeedback(model, FeedbackType.SUCCESS, "Seadet ei leitud andmebaasist!");
+            }
+        }
+
+        model.addAttribute("devices", dataSaveService.getAllDevices());
+        return "devices";
     }
 }

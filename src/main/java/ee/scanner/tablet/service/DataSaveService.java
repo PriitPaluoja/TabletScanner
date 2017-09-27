@@ -1,9 +1,6 @@
 package ee.scanner.tablet.service;
 
-import ee.scanner.tablet.dto.DeviceDTO;
-import ee.scanner.tablet.dto.RentalDTO;
-import ee.scanner.tablet.dto.UserDTO;
-import ee.scanner.tablet.dto.UserWrapperDTO;
+import ee.scanner.tablet.dto.*;
 import ee.scanner.tablet.exception.DeviceDuplicateException;
 import ee.scanner.tablet.exception.IdNotPresentException;
 import ee.scanner.tablet.exception.PinDuplicateException;
@@ -21,7 +18,9 @@ public interface DataSaveService {
 
     UserWrapperDTO getAllUsers();
 
-    List<DeviceDTO> getAllDevices();
+    DeviceWrapperDTO getAllDevices();
 
     void updateUsers(UserWrapperDTO dto) throws IdNotPresentException;
+
+    void updateDevices(DeviceWrapperDTO dto) throws IdNotPresentException;
 }

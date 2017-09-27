@@ -22,6 +22,7 @@ public class Device {
     private Integer id;
 
     private String ident;
+    private Boolean active;
 
     @Override
     public boolean equals(Object o) {
