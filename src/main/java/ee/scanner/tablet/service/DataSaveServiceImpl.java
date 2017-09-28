@@ -5,6 +5,7 @@ import ee.scanner.tablet.db.RentalRepository;
 import ee.scanner.tablet.db.UserRepository;
 import ee.scanner.tablet.domain.Device;
 import ee.scanner.tablet.domain.DeviceUser;
+import ee.scanner.tablet.domain.Rental;
 import ee.scanner.tablet.dto.*;
 import ee.scanner.tablet.exception.DeviceDuplicateException;
 import ee.scanner.tablet.exception.IdNotPresentException;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,18 +28,18 @@ public class DataSaveServiceImpl implements DataSaveService {
 
     @Override
     public void saveDevice(DeviceDTO deviceDTO) throws DeviceDuplicateException {
-        if (deviceRepository.findDeviceByIdent(deviceDTO.getDeviceIdentification()) != null) {
+        if (deviceRepository.findDeviceByIdent(deviceDTO.getDeviceIdentification()) != null)
             throw new DeviceDuplicateException();
-        }
+
         deviceRepository.save(new Device(null, deviceDTO.getDeviceIdentification(), true));
     }
 
     @Override
     public void saveUser(UserDTO userDTO) throws PinDuplicateException {
-        // No duplicate check
         if (userRepository.findByPin(userDTO.getPin()).isPresent()) {
             throw new PinDuplicateException();
         }
+
         userRepository.save(new DeviceUser(null,
                 userDTO.getFirstName(),
                 userDTO.getLastName(),
@@ -47,60 +49,43 @@ public class DataSaveServiceImpl implements DataSaveService {
 
     @Override
     public List<RentalDTO> getActiveRentals() {
-        return rentalRepository.findByIsReturned(false).stream()
-                .map(e -> new RentalDTO(
-                                e.getId(),
-                                new UserDTO(e.getId(), e.getUser().getFirstName(), e.getUser().getLastName(), e.getUser().getPin(), e.getUser().getActive()),
-                                new DeviceDTO(e.getId(), e.getDevice().getIdent(), e.getDevice().getActive()),
-                                e.getRentalTime(),
-                                e.getReturnTime(),
-                                e.getIsReturned(),
-                                new UserDTO(e.getId(), e.getUser().getFirstName(), e.getUser().getLastName(), e.getUser().getPin(), e.getUser().getActive())
-                        )
-                ).collect(Collectors.toList());
+        return rentalRepository.findByIsReturned(false).stream().map(convertRentalToDTO()).collect(Collectors.toList());
     }
 
     @Override
     public List<RentalDTO> getAllRentals() {
-        return rentalRepository.findAll()
-                .stream().map(e -> new RentalDTO(
-                                e.getId(),
-                                new UserDTO(e.getId(), e.getUser().getFirstName(), e.getUser().getLastName(), e.getUser().getPin(), e.getUser().getActive()),
-                                new DeviceDTO(e.getId(), e.getDevice().getIdent(), e.getDevice().getActive()),
-                                e.getRentalTime(),
-                                e.getReturnTime(),
-                                e.getIsReturned(),
-                                new UserDTO(e.getId(), e.getUser().getFirstName(), e.getUser().getLastName(), e.getUser().getPin(), e.getUser().getActive())
-                        )
-                ).collect(Collectors.toList());
+        return rentalRepository.findAll().stream().map(convertRentalToDTO()).collect(Collectors.toList());
     }
 
     @Override
     public UserWrapperDTO getAllUsers() {
         return new UserWrapperDTO(userRepository.findAll().stream()
-                .map(e -> new UserManagementDTO(e.getId(), e.getFirstName(), e.getLastName(), e.getPin(), e.getActive()))
+                .map(DeviceUserUserManagementDTO())
                 .collect(Collectors.toList()));
+    }
+
+    private Function<DeviceUser, UserManagementDTO> DeviceUserUserManagementDTO() {
+        return deviceUser -> new UserManagementDTO(deviceUser.getId(),
+                deviceUser.getFirstName(),
+                deviceUser.getLastName(),
+                deviceUser.getPin(),
+                deviceUser.getActive());
     }
 
     @Override
     public DeviceWrapperDTO getAllDevices() {
-        return new DeviceWrapperDTO(deviceRepository.findAll().stream()
-                .map(e -> new DeviceDTO(e.getId(), e.getIdent(), e.getActive())).collect(Collectors.toList()));
+        return new DeviceWrapperDTO(deviceRepository.findAll().stream().map(deviceDTO()).collect(Collectors.toList()));
     }
 
     @Override
     public void updateUsers(UserWrapperDTO dto) throws IdNotPresentException, PinNotPresentException, PinDuplicateException {
-        List<DeviceUser> fromFrontEnd = dto.getUsers().stream()
-                .map(e -> new DeviceUser(e.getId(), e.getFirstName(), e.getLastName(), e.getPin(), e.getActive()))
-                .collect(Collectors.toList());
+        List<DeviceUser> fromFrontEnd = dto.getUsers().stream().map(userManagementDeviceUser()).collect(Collectors.toList());
 
         for (DeviceUser fromFront : fromFrontEnd) {
             DeviceUser fromDb = userRepository.findOne(fromFront.getId());
 
-
-            if (fromDb == null) {
-                throw new IdNotPresentException();
-            } else {
+            if (fromDb == null) throw new IdNotPresentException();
+            else {
                 if (fromFront.getPin().isEmpty()) throw new PinNotPresentException();
                 if (!fromFront.getPin().equals(fromDb.getPin()) && userRepository.findByPin(fromFront.getPin()).isPresent())
                     throw new PinDuplicateException();
@@ -113,9 +98,7 @@ public class DataSaveServiceImpl implements DataSaveService {
 
     @Override
     public void updateDevices(DeviceWrapperDTO dto) throws IdNotPresentException, DeviceDuplicateException {
-        List<Device> fromFrontEnd = dto.getDevices().stream()
-                .map(e -> new Device(e.getId(), e.getDeviceIdentification(), e.getActive()))
-                .collect(Collectors.toList());
+        List<Device> fromFrontEnd = dto.getDevices().stream().map(dtoDevice()).collect(Collectors.toList());
 
         for (Device fromFront : fromFrontEnd) {
             Device fromDb = deviceRepository.findOne(fromFront.getId());
@@ -131,5 +114,39 @@ public class DataSaveServiceImpl implements DataSaveService {
                 deviceRepository.save(fromFront);
             }
         }
+    }
+
+    private Function<Rental, RentalDTO> convertRentalToDTO() {
+        return e -> new RentalDTO(
+                e.getId(),
+                new UserDTO(e.getUser().getId(),
+                        e.getUser().getFirstName(),
+                        e.getUser().getLastName(),
+                        e.getUser().getPin(),
+                        e.getUser().getActive()),
+                new DeviceDTO(e.getDevice().getId(),
+                        e.getDevice().getIdent(),
+                        e.getDevice().getActive()),
+                e.getRentalTime(),
+                e.getReturnTime(),
+                e.getIsReturned(),
+                e.getReturner() == null ? null : new UserDTO(e.getReturner().getId(),
+                        e.getReturner().getFirstName(),
+                        e.getReturner().getLastName(),
+                        e.getReturner().getPin(),
+                        e.getReturner().getActive())
+        );
+    }
+
+    private Function<UserManagementDTO, DeviceUser> userManagementDeviceUser() {
+        return userManagementDTO -> new DeviceUser(userManagementDTO.getId(), userManagementDTO.getFirstName(), userManagementDTO.getLastName(), userManagementDTO.getPin(), userManagementDTO.getActive());
+    }
+
+    private Function<DeviceDTO, Device> dtoDevice() {
+        return deviceDTO -> new Device(deviceDTO.getId(), deviceDTO.getDeviceIdentification(), deviceDTO.getActive());
+    }
+
+    private Function<Device, DeviceDTO> deviceDTO() {
+        return device -> new DeviceDTO(device.getId(), device.getIdent(), device.getActive());
     }
 }

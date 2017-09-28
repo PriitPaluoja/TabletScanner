@@ -31,30 +31,42 @@ public class RentalServiceImpl implements RentalService {
 
     @Override
     public void takeDevices(RegisterDTO dto) throws NoUserFoundException, NoDeviceFoundException {
+
+        // Fin user by PIN
         DeviceUser user = userRepository.findByPin(dto.getPersonInformation()).orElse(null);
+        // If no such user, throw exception
         if (user == null) throw new NoUserFoundException();
 
-        LocalDateTime timestamp = LocalDateTime.now();
 
-        // Find all devices from database
-        List<Device> lst = Arrays.stream(dto.getDevices().split(RENTAL_DEVICE_SEPARATOR))
+        // Convert device id-s from input to Device Object (via database). Filter out Null Objects
+        List<Device> devices = Arrays.stream(dto.getDevices().trim().split(RENTAL_DEVICE_SEPARATOR))
                 .map(String::trim)
                 .map(deviceRepository::findDeviceByIdent)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        lst.stream()
+        // If is empty, then there are no devices from user input
+        if (devices.isEmpty()) throw new NoDeviceFoundException();
+
+        // If some of the mapping failed (see nonNull from previous line), throw exception
+        if (devices.size() != dto.getDevices().trim().split(RENTAL_DEVICE_SEPARATOR).length)
+            throw new NoDeviceFoundException();
+
+        // If some of the rentals associated with these devices are marked as not returned, mark them as returned
+        List<Rental> rentals = devices.stream()
                 .map(e -> rentalRepository.findByDeviceIdentAndIsReturned(e.getIdent(), false))
-                .forEach(e -> {
-                    if (e != null) {
-                        e.setIsReturned(true);
-                        rentalRepository.save(e);
-                    }
-                });
+                .collect(Collectors.toList());
 
-        if (lst.isEmpty()) throw new NoDeviceFoundException();
+        for (Rental e : rentals) {
+            if (e != null) {
+                e.setIsReturned(true);
+                rentalRepository.save(e);
+            }
+        }
 
-        lst.forEach(device -> rentalRepository.save(new Rental(null, user, device, timestamp, null, false, null)));
+        // Save new rentals
+        LocalDateTime timestamp = LocalDateTime.now();
+        devices.forEach(device -> rentalRepository.save(new Rental(null, user, device, timestamp, null, false, null)));
     }
 
     @Override
@@ -62,21 +74,23 @@ public class RentalServiceImpl implements RentalService {
         // Find all devices from database
         List<Rental> rentals = Arrays.stream(dto.getDevices().split(RENTAL_DEVICE_SEPARATOR))
                 .map(deviceRepository::findDeviceByIdent)
+                .filter(Objects::nonNull)
                 .map(e -> rentalRepository.findByDeviceIdentAndIsReturned(e.getIdent(), false))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
+
         // Find all rentals regarding user
         if (rentals.isEmpty()) throw new NoActiveRentalsFoundException();
 
+
+        // Mark rentals as returned
         DeviceUser user = userRepository.findByPin(dto.getPersonInformation().trim()).orElse(null);
-
-        if (user == null) throw new NoUserFoundException();
-
         LocalDateTime timestamp = LocalDateTime.now();
 
         for (Rental rental : rentals) {
-            rental.setReturner(user);
+            if (user != null) rental.setReturner(user);
+
             rental.setReturnTime(timestamp);
             rental.setIsReturned(true);
             rentalRepository.save(rental);

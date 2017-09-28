@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 
-@SuppressWarnings("Duplicates")
 @Controller
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @PreAuthorize("hasRole('ADMIN')")
@@ -31,8 +30,7 @@ public class DataController {
     private final DataSaveService dataSaveService;
 
     @GetMapping("/insert")
-    public String insertPage(@ModelAttribute("userDTO") UserDTO userDTO,
-                             @ModelAttribute("deviceDTO") DeviceDTO deviceDTO) {
+    public String insertPage(@ModelAttribute("userDTO") UserDTO usr, @ModelAttribute("deviceDTO") DeviceDTO dev) {
         return "insert";
     }
 
@@ -56,8 +54,10 @@ public class DataController {
 
     @PostMapping("/insert_user")
     public String insertUser(@ModelAttribute("deviceDTO") DeviceDTO deviceDTO,
-                             @Valid @ModelAttribute("userDTO") UserDTO userDTO, BindingResult bindingResult,
+                             @Valid @ModelAttribute("userDTO") UserDTO userDTO,
+                             BindingResult bindingResult,
                              Model model) {
+
         if (bindingResult.hasErrors()) {
             ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Kasutajaga seotud andmed ei ole korreksed!");
         } else {

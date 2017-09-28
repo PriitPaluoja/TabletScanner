@@ -39,13 +39,13 @@
                 <!--/*@thymesVar id="rentalsHistory" type="java.util.List<ee.scanner.tablet.dto.RentalDTO>"*/-->
                 <tbody>
                 <tr th:each="hist : ${rentalsHistory}">
-                    <td th:text="${hist.getDevices().getDeviceIdentification()}"></td>
-                    <td th:text="${hist.getUser().getFirstName()}"></td>
-                    <td th:text="${hist.getUser().getLastName()}"></td>
+                    <td th:text="${hist.getDevices() != null ? hist.getDevices().getDeviceIdentification() : ''}"></td>
+                    <td th:text="${hist.getUser() != null ? hist.getUser().getFirstName() : ''}"></td>
+                    <td th:text="${hist.getUser() != null ? hist.getUser().getLastName() : ''}"></td>
                     <td th:text="${hist.getRentalTime()} ? ${#temporals.format(hist.getRentalTime(),'dd.MM.yyyy HH:mm:ss')}"></td>
                     <td th:text="${hist.getReturnTime()} ? ${#temporals.format(hist.getReturnTime(),'dd.MM.yyyy HH:mm:ss')}"></td>
-                    <td th:text="${hist.getReturner().getFirstName()}"></td>
-                    <td th:text="${hist.getReturner().getLastName()}"></td>
+                    <td th:text="${hist.getReturner() != null ? hist.getReturner().getFirstName() : ''}"></td>
+                    <td th:text="${hist.getReturner() != null ? hist.getReturner().getLastName() : ''}"></td>
                     <td th:text="${hist.getIsReturned() ? ' ✔' :'✗'}"></td>
                 </tr>
                 </tbody>
