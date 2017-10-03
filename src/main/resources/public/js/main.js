@@ -6,16 +6,18 @@ $(document).ready(function () {
     $('#devs').DataTable();
 
 
-    $(document ).ready(function() {
-        $('#devices').bind('keyup','keydown', function(event) {
+    $(document).ready(function () {
+        $('#devices').bind('keyup', 'keydown', function (event) {
             var inputLength = event.target.value.length;
-            if (event.keyCode !== 8){
-                if((inputLength + 1) % 6 === 0){
+            if (event.keyCode !== 8) {
+                if ((inputLength + 1) % 6 === 0) {
                     var thisVal = event.target.value;
                     thisVal += '-';
                     $(event.target).val(thisVal);
                 }
             }
+            $('#charNum').text(event.target.value.split("-").length - 1);
         })
     });
+
 });

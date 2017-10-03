@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html lang="et" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="et" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>THMK Tahvelarvutite laenutus</title>
     <meta charset="UTF-8"/>
@@ -48,7 +48,8 @@
                     <div class="modal-header"><h2 class="modal-title">Seadmed</h2></div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <h3><label th:for="${#fields.idFromName('devices')}">Tahvelarvutid</label></h3>
+                            <h4>Seadmeid sisestatud: <span id="charNum"></span></h4>
+                            <h4><label th:for="${#fields.idFromName('devices')}">Tahvelarvutid</label></h4>
                             <textarea th:field="*{devices}" rows="4" cols="50" class="form-control"></textarea>
                         </div>
                     </div>
