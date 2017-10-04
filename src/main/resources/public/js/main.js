@@ -1,3 +1,8 @@
+function setCharAt(str, index, chr) {
+    if (index > str.length - 1) return str;
+    return str.substr(0, index + 1) + chr + str.substr(index + 1);
+}
+
 $(document).ready(function () {
     // In details and add page: covert assignable questions table to the Datatable
     $('#rentals').DataTable();
@@ -6,18 +11,19 @@ $(document).ready(function () {
     $('#devs').DataTable();
 
 
-    $(document).ready(function () {
-        $('#devices').bind('keyup', 'keydown', function (event) {
-            var inputLength = event.target.value.length;
-            if (event.keyCode !== 8) {
-                if ((inputLength + 1) % 6 === 0) {
-                    var thisVal = event.target.value;
-                    thisVal += '-';
-                    $(event.target).val(thisVal);
-                }
-            }
-            $('#charNum').text(event.target.value.split("-").length - 1);
-        })
-    });
+    var total_length = 0;
+    $('#devices').bind('input propertychange', function (event) {
+        var inputLength = event.target.value.length;
 
+        if (inputLength > total_length && (inputLength % 5 === 0)) {
+            var thisVal = event.target.value;
+            var newValue = setCharAt(thisVal, thisVal.length - 2, '-');
+            $(event.target).val(newValue);
+            total_length = newValue.length;
+        }
+
+        total_length = inputLength;
+
+        $('#charNum').text(event.target.value.split("-").length - 1);
+    })
 });
