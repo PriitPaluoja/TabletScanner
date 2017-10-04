@@ -24,6 +24,6 @@ $(document).ready(function () {
 
         total_length = inputLength;
 
-        $('#charNum').text(event.target.value.split("-").length - 1);
+        $('#charNum').text(event.target.value.split("-").length);
     })
 });
