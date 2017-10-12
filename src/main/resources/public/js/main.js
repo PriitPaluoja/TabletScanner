@@ -15,7 +15,7 @@ $(document).ready(function () {
     $('#devices').bind('input propertychange', function (event) {
         var inputLength = event.target.value.length;
 
-        if (inputLength > total_length && (inputLength % 5 === 0)) {
+        if (inputLength > total_length && (inputLength % 6 === 0)) {
             var thisVal = event.target.value;
             var newValue = setCharAt(thisVal, thisVal.length - 2, '-');
             $(event.target).val(newValue);
