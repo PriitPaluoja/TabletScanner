@@ -26,7 +26,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 // Allow access without authentication:
-                .antMatchers("/public/").permitAll()
+                .antMatchers("/public/","/").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

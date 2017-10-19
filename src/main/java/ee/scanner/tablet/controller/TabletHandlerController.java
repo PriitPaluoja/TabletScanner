@@ -29,6 +29,8 @@ public class TabletHandlerController {
                 try {
                     rentalService.takeDevices(dto);
                     ControllerUtil.setFeedback(model, FeedbackType.SUCCESS, "Seadmed väljastatud");
+                    dto.setDevices("");
+                    dto.setPersonInformation("");
                 } catch (NoUserFoundException e) {
                     ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Sisestatud PIN-iga kasutajat ei leitud!");
                 } catch (NoDeviceFoundException e) {
@@ -39,6 +41,8 @@ public class TabletHandlerController {
                 try {
                     rentalService.returnDevices(dto);
                     ControllerUtil.setFeedback(model, FeedbackType.SUCCESS, "Seadmed tagastatud!");
+                    dto.setDevices("");
+                    dto.setPersonInformation("");
                 } catch (NoActiveRentalsFoundException e) {
                     ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Sisestatud seadmetega ei ole seotud ühtegi laenutust!");
                 } catch (NoUserFoundException e) {
