@@ -1,8 +1,3 @@
-function setCharAt(str, index, chr) {
-    if (index > str.length - 1) return str;
-    return str.substr(0, index + 1) + chr + str.substr(index + 1);
-}
-
 $(document).ready(function () {
     // In details and add page: covert assignable questions table to the Datatable
     $('#rentals').DataTable();
