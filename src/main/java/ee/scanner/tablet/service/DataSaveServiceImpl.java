@@ -116,6 +116,11 @@ public class DataSaveServiceImpl implements DataSaveService {
         }
     }
 
+    @Override
+    public Boolean userExists(String pin) {
+        return userRepository.findByPin(pin).isPresent();
+    }
+
     private Function<Rental, RentalDTO> convertRentalToDTO() {
         return e -> new RentalDTO(
                 e.getId(),

@@ -21,5 +21,23 @@ $(document).ready(function () {
         }
         $(event.target).val(finalText);
         $('#charNum').text(event.target.value.split("-").length);
-    })
+    });
+
+
+    $("#personInformation").bind("input propertychange", function () {
+        $.ajax({
+            url: window.location.href + "exists",
+            type: "get",
+            data: {
+                pin: $("#personInformation").val()
+            },
+            success: function (data) {
+                if (typeof(data) === "boolean") {
+
+                    $("#usr").removeClass("valid invalid").addClass(data ? "valid" : "invalid");
+                }
+            }
+        });
+    });
+
 });

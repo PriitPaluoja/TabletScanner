@@ -41,3 +41,8 @@ body {
 .invalid {
     color: red;
 }
+
+/* FORM VALID */
+.valid {
+    color: green;
+}
