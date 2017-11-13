@@ -11,19 +11,20 @@ $(document).ready(function () {
     $('#devs').DataTable();
 
 
-    var total_length = 0;
     $('#devices').bind('input propertychange', function (event) {
-        var inputLength = event.target.value.length;
+        var text = event.target.value.replace(new RegExp("-", "g"), "");
+        $(event.target).val("");
 
-        if (inputLength > total_length && (inputLength % 6 === 0)) {
-            var thisVal = event.target.value;
-            var newValue = setCharAt(thisVal, thisVal.length - 2, '-');
-            $(event.target).val(newValue);
-            total_length = newValue.length;
+        var finalText = "";
+        var i = 0;
+        for (var token in text) {
+            if (i !== 0 && i % 5 === 0) {
+                finalText += "-";
+            }
+            finalText += text[token];
+            i++;
         }
-
-        total_length = inputLength;
-
+        $(event.target).val(finalText);
         $('#charNum').text(event.target.value.split("-").length);
     })
 });

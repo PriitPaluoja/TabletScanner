@@ -4,6 +4,7 @@ import ee.scanner.tablet.dto.RegisterDTO;
 import ee.scanner.tablet.exception.NoActiveRentalsFoundException;
 import ee.scanner.tablet.exception.NoDeviceFoundException;
 import ee.scanner.tablet.exception.NoUserFoundException;
+import ee.scanner.tablet.exception.SomeDeviceNotFoundException;
 import ee.scanner.tablet.feedback.FeedbackType;
 import ee.scanner.tablet.service.RentalService;
 import ee.scanner.tablet.util.ControllerUtil;
@@ -29,13 +30,16 @@ public class TabletHandlerController {
                 try {
                     rentalService.takeDevices(dto);
                     ControllerUtil.setFeedback(model, FeedbackType.SUCCESS, "Seadmed väljastatud");
-                    dto.setDevices("");
-                    dto.setPersonInformation("");
                 } catch (NoUserFoundException e) {
                     ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Sisestatud PIN-iga kasutajat ei leitud!");
                 } catch (NoDeviceFoundException e) {
                     ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Sisestatud seadmeid ei leitud!");
+                } catch (SomeDeviceNotFoundException e) {
+                    ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Sisestatud seadmete arv ei vasta tegelikele laenutatud seadmetele!");
+                    ControllerUtil.setFeedback(model, FeedbackType.SUCCESS, "Seadmed väljastatud");
                 }
+                dto.setDevices("");
+                dto.setPersonInformation("");
                 break;
             case "return":
                 try {

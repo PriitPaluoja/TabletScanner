@@ -10,6 +10,7 @@ import ee.scanner.tablet.dto.RegisterDTO;
 import ee.scanner.tablet.exception.NoActiveRentalsFoundException;
 import ee.scanner.tablet.exception.NoDeviceFoundException;
 import ee.scanner.tablet.exception.NoUserFoundException;
+import ee.scanner.tablet.exception.SomeDeviceNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class RentalServiceImpl implements RentalService {
     private final DeviceRepository deviceRepository;
 
     @Override
-    public void takeDevices(RegisterDTO dto) throws NoUserFoundException, NoDeviceFoundException {
+    public void takeDevices(RegisterDTO dto) throws NoUserFoundException, NoDeviceFoundException, SomeDeviceNotFoundException {
 
         // Fin user by PIN
         DeviceUser user = userRepository.findByPin(dto.getPersonInformation()).orElse(null);
@@ -41,16 +42,16 @@ public class RentalServiceImpl implements RentalService {
         // Convert device id-s from input to Device Object (via database). Filter out Null Objects
         List<Device> devices = Arrays.stream(dto.getDevices().trim().split(RENTAL_DEVICE_SEPARATOR))
                 .map(String::trim)
+                .collect(Collectors.toSet())
+                .stream()
                 .map(deviceRepository::findDeviceByIdent)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
+
         // If is empty, then there are no devices from user input
         if (devices.isEmpty()) throw new NoDeviceFoundException();
 
-        // If some of the mapping failed (see nonNull from previous line), throw exception
-        if (devices.size() != dto.getDevices().trim().split(RENTAL_DEVICE_SEPARATOR).length)
-            throw new NoDeviceFoundException();
 
         // If some of the rentals associated with these devices are marked as not returned, mark them as returned
         List<Rental> rentals = devices.stream()
@@ -67,6 +68,10 @@ public class RentalServiceImpl implements RentalService {
         // Save new rentals
         LocalDateTime timestamp = LocalDateTime.now();
         devices.forEach(device -> rentalRepository.save(new Rental(null, user, device, timestamp, null, false, null)));
+
+        // If some of the mapping failed, throw exception
+        if (devices.size() != dto.getDevices().trim().split(RENTAL_DEVICE_SEPARATOR).length)
+            throw new SomeDeviceNotFoundException();
     }
 
     @Override
@@ -75,6 +80,8 @@ public class RentalServiceImpl implements RentalService {
         List<Rental> rentals = Arrays.stream(dto.getDevices().split(RENTAL_DEVICE_SEPARATOR))
                 .map(deviceRepository::findDeviceByIdent)
                 .filter(Objects::nonNull)
+                .collect(Collectors.toSet())
+                .stream()
                 .map(e -> rentalRepository.findByDeviceIdentAndIsReturned(e.getIdent(), false))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
