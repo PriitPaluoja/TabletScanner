@@ -51,7 +51,7 @@
                         <div class="form-group">
                             <h4>Sisestamisel seade nr: <span id="charNum"></span></h4>
                             <h4><label th:for="${#fields.idFromName('devices')}">Tahvelarvutid</label></h4>
-                            <textarea th:field="*{devices}" rows="4" cols="50" class="form-control"></textarea>
+                            <textarea th:field="*{devices}" rows="4" cols="50" class="form-control" autofocus="autofocus"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -63,7 +63,6 @@
             </div>
         </div>
     </form>
-
 </div>
 </body>
 </html>

@@ -53,7 +53,7 @@ $(document).ready(function () {
     });
 
 
-// Async check that user exists.
+    // Async check that user exists.
     $("#personInformation").bind("input propertychange", function () {
         $.ajax({
             url: window.location.href + "exists",
@@ -66,5 +66,10 @@ $(document).ready(function () {
                 }
             }
         });
+    });
+
+    // Add autofocus on modal elements
+    $('.modal').on('shown.bs.modal', function () {
+        $(this).find('[autofocus]').focus();
     });
 });
