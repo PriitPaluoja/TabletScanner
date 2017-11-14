@@ -7,15 +7,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+/**
+ * REST controller for AJAX
+ */
 @RestController
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class InfoController {
     private final DataSaveService dataSaveService;
 
     @PostMapping("/exists")
     public String userExists(@RequestParam("pin") String pin) {
         if (dataSaveService.userExists(pin)) {
-            return dataSaveService.getUser(pin);
+            return dataSaveService.getUserFirstName(pin);
         } else return "";
     }
 }

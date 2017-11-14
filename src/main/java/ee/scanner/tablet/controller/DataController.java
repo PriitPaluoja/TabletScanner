@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 
+/**
+ * Controller for inserting data into the database.
+ */
 @Controller
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @PreAuthorize("hasRole('ADMIN')")
@@ -110,7 +113,6 @@ public class DataController {
                 ControllerUtil.setFeedback(model, FeedbackType.ERROR, "Sisestatud identifikaator on juba andmebaasis!");
             }
         }
-
         model.addAttribute("devices", dataSaveService.getAllDevices());
         return "devices";
     }

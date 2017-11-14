@@ -8,6 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+/**
+ * Controller for handling various statistical queries.
+ */
 @Controller
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @PreAuthorize("hasRole('ADMIN')")

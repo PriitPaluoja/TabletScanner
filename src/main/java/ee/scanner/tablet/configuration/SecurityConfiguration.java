@@ -8,7 +8,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-
+/**
+ * Setup admin username and password and URL's which do not need authentication.
+ * <p>
+ * Setup login and logout URLs and logout authentication clearing.
+ */
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -16,39 +20,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private String adminPassword;
     @Value("${admin.username}")
     private String adminUsername;
-    @Value("${user.password}")
-    private String userPassword;
-    @Value("${user.username}")
-    private String userUsername;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                // Allow access without authentication:
-                .antMatchers("/public/","/","/exists").permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                // Setup login page
-                .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/", true)
-                .permitAll()
-                .and()
-                // Setup logout
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .clearAuthentication(true)
-                .logoutSuccessUrl("/login")
-                .permitAll()
-                .and()
-                .csrf();
+        http.authorizeRequests().antMatchers("/public/", "/", "/exists").permitAll().anyRequest().authenticated();
+        http.formLogin().loginPage("/login").defaultSuccessUrl("/", true).permitAll();
+        http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).clearAuthentication(true).logoutSuccessUrl("/login").permitAll();
     }
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser(userUsername).password(userPassword).roles("USER");
         auth.inMemoryAuthentication().withUser(adminUsername).password(adminPassword).roles("ADMIN");
     }
 }

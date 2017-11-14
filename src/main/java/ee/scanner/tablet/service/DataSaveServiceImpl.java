@@ -28,9 +28,9 @@ public class DataSaveServiceImpl implements DataSaveService {
 
     @Override
     public void saveDevice(DeviceDTO deviceDTO) throws DeviceDuplicateException {
-        if (deviceRepository.findDeviceByIdent(deviceDTO.getDeviceIdentification()) != null)
+        if (deviceRepository.findDeviceByIdent(deviceDTO.getDeviceIdentification()) != null) {
             throw new DeviceDuplicateException();
-
+        }
         deviceRepository.save(new Device(null, deviceDTO.getDeviceIdentification(), true));
     }
 
@@ -39,7 +39,6 @@ public class DataSaveServiceImpl implements DataSaveService {
         if (userRepository.findByPin(userDTO.getPin()).isPresent()) {
             throw new PinDuplicateException();
         }
-
         userRepository.save(new DeviceUser(null,
                 userDTO.getFirstName(),
                 userDTO.getLastName(),
@@ -106,8 +105,6 @@ public class DataSaveServiceImpl implements DataSaveService {
             if (fromDb == null)
                 throw new IdNotPresentException();
             else {
-                //TODO: check duplicates
-
                 if (!fromFront.getIdent().equals(fromDb.getIdent()) && deviceRepository.findDeviceByIdent(fromFront.getIdent()) != null)
                     throw new DeviceDuplicateException();
 
@@ -122,7 +119,7 @@ public class DataSaveServiceImpl implements DataSaveService {
     }
 
     @Override
-    public String getUser(String pin) {
+    public String getUserFirstName(String pin) {
         return userRepository.findByPin(pin).get().getFirstName();
     }
 

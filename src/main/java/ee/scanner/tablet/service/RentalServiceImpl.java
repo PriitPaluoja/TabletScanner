@@ -52,7 +52,6 @@ public class RentalServiceImpl implements RentalService {
         // If is empty, then there are no devices from user input
         if (devices.isEmpty()) throw new NoDeviceFoundException();
 
-
         // If some of the rentals associated with these devices are marked as not returned, mark them as returned
         List<Rental> rentals = devices.stream()
                 .map(e -> rentalRepository.findByDeviceIdentAndIsReturned(e.getIdent(), false))
@@ -75,7 +74,7 @@ public class RentalServiceImpl implements RentalService {
     }
 
     @Override
-    public void returnDevices(RegisterDTO dto) throws NoSuchElementException, NoActiveRentalsFoundException, NoUserFoundException {
+    public void returnDevices(RegisterDTO dto) throws NoActiveRentalsFoundException {
         // Find all devices from database
         List<Rental> rentals = Arrays.stream(dto.getDevices().split(RENTAL_DEVICE_SEPARATOR))
                 .map(deviceRepository::findDeviceByIdent)
@@ -89,7 +88,6 @@ public class RentalServiceImpl implements RentalService {
 
         // Find all rentals regarding user
         if (rentals.isEmpty()) throw new NoActiveRentalsFoundException();
-
 
         // Mark rentals as returned
         DeviceUser user = userRepository.findByPin(dto.getPersonInformation().trim()).orElse(null);
