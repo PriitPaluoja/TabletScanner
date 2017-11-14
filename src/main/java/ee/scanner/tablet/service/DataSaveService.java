@@ -26,4 +26,6 @@ public interface DataSaveService {
     void updateDevices(DeviceWrapperDTO dto) throws IdNotPresentException, DeviceDuplicateException;
 
     Boolean userExists(String pin);
+
+    String getUser(String pin);
 }
