@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
 
 /**
- * Controller for inserting data into the database.
+ * Controller for inserting data into the database. Accessible only to admin.
  */
 @Controller
 @AllArgsConstructor(onConstructor = @__(@Autowired))

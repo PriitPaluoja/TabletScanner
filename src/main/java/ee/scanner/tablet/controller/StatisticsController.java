@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
- * Controller for handling various statistical queries.
+ * Controller for handling various statistical queries. Accessible only to admin.
  */
 @Controller
 @AllArgsConstructor(onConstructor = @__(@Autowired))
