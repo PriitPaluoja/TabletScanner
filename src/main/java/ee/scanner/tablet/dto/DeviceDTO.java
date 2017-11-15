@@ -1,6 +1,9 @@
 package ee.scanner.tablet.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -8,7 +11,6 @@ import org.hibernate.validator.constraints.NotBlank;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 public class DeviceDTO {
 
     private Integer id;
@@ -18,4 +20,9 @@ public class DeviceDTO {
     private String deviceIdentification;
 
     private Boolean active;
+
+    @Override
+    public String toString() {
+        return deviceIdentification + ',' + active;
+    }
 }

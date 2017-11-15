@@ -19,9 +19,8 @@
     <div th:replace="fragments/feedback :: feedback-messages (feedbackList=${feedbackList})"></div>
 
     <div class="panel panel-default">
-        <div class="panel-heading">Laenutuste ajalugu</div>
+        <div class="panel-heading">Laenutuste ajalugu <span><a th:href="@{/history_csv}">Ekspordi</a></span></div>
         <div class="panel-body">
-
 
             <table id="rentals_history" class="table table-hover display">
                 <thead>

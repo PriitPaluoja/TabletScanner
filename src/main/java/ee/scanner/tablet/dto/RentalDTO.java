@@ -20,4 +20,9 @@ public class RentalDTO {
     private LocalDateTime returnTime;
     private Boolean isReturned;
     private UserDTO returner;
+
+    @Override
+    public String toString() {
+        return user + "," + (devices == null ? ",," : devices) + "," + rentalTime + "," + (returnTime == null ? "" : returnTime) + "," + isReturned + "," + (returner == null ? ",,," : returner);
+    }
 }

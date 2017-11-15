@@ -21,7 +21,7 @@
     <!--/*@thymesVar id="users" type="ee.scanner.tablet.dto.UserWrapperDTO"*/-->
     <form th:object="${users}" th:action="@{/update_user}" method="post">
         <div class="panel panel-default">
-            <div class="panel-heading">Kasutajad</div>
+            <div class="panel-heading">Kasutajad <span><a th:href="@{/users_csv}">Ekspordi</a></span></div>
             <div class="panel-body">
                 <table id="usrs" class="table table-hover display">
                     <thead>

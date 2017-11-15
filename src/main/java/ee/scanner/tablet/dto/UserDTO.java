@@ -30,4 +30,8 @@ public class UserDTO {
 
     private Boolean active;
 
+    @Override
+    public String toString() {
+        return pin + "," + firstName + "," + lastName + "," + active;
+    }
 }

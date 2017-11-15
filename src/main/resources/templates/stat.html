@@ -19,7 +19,7 @@
     <div th:replace="fragments/feedback :: feedback-messages (feedbackList=${feedbackList})"></div>
 
     <div class="panel panel-default">
-        <div class="panel-heading">Välja laenutatud seadmed</div>
+        <div class="panel-heading">Välja laenutatud seadmed <span><a th:href="@{/active_csv}">Ekspordi</a></span></div>
         <div class="panel-body">
             <table id="rentals" class="table table-hover display">
                 <thead>

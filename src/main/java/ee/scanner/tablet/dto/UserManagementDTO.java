@@ -27,4 +27,9 @@ public class UserManagementDTO {
     private String pin;
 
     private Boolean active;
+
+    @Override
+    public String toString() {
+        return pin + "," + firstName + "," + lastName + "," + active;
+    }
 }
