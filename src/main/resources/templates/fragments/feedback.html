@@ -28,11 +28,9 @@
         <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/devices}">Seadmed</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-        <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Logi sisse</a></li>
         <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logi välja (<span sec:authentication="name" class="admin-name">[user]</span>)</a></li>
     </ul>
 </nav>
-
 
 </body>
 </html>

@@ -58,7 +58,8 @@ $(document).ready(function () {
         $.ajax({
             url: window.location.href + "exists",
             type: "POST",
-            data: {pin: $("#personInformation").val(), _csrf: $('meta[name="_csrf"]').attr('content')},
+            //data: {pin: $("#personInformation").val(), _csrf: $('meta[name="_csrf"]').attr('content')},
+            data: {pin: $("#personInformation").val()},
             success: function (data) {
                 if (typeof(data) === "string") {
                     $("#usr").text(data !== "" ? "Tere, " + data + "! ✔" : "Sisesta laenutaja/tagastaja PIN ✘")
