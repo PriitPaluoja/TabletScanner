@@ -47,7 +47,7 @@ $(document).ready(function () {
             i++;
         }
         // Set text to input
-        $(event.target).val(finalText);
+        $(event.target).val(finalText.toUpperCase());
         // Update tablet counter
         $('#charNum').text(event.target.value.split("-").length);
     });
