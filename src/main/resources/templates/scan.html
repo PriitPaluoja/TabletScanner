@@ -19,7 +19,7 @@
     <div th:replace="fragments/feedback :: feedback-messages (feedbackList=${feedbackList})"></div>
 
     <div class="btn-group btn-group-justified" data-toggle="tooltip" title="Vajuta siia, et alustada tahvelarvutite laenamist või tagastamist">
-        <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#retriever">Alusta laenutamist/tagastamist</a>
+        <a class="btn btn-primary btn-xlarge" data-toggle="modal" data-target="#retriever">Alustamiseks vajuta siia</a>
     </div>
 
     <!--/*@thymesVar id="registerDTO" type="ee.scanner.tablet.dto.RegisterDTO"*/-->
@@ -27,10 +27,10 @@
         <div th:id="'retriever'" class="modal fade" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header"><h2 class="modal-title">Laenuta</h2></div>
+                    <div class="modal-header"><h2 class="modal-title">Sisesta printeri PIN</h2></div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <h3 id="usr"><label th:for="${#fields.idFromName('personInformation')}">Laenutaja</label></h3>
+                            <h3 id="usr"><label th:for="${#fields.idFromName('personInformation')}">Printeri kood</label></h3>
                             <textarea th:field="*{personInformation}" rows="4" cols="50" class="form-control" autofocus="autofocus"></textarea>
                         </div>
                     </div>

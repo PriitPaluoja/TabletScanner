@@ -62,7 +62,7 @@ $(document).ready(function () {
             data: {pin: $("#personInformation").val()},
             success: function (data) {
                 if (typeof(data) === "string") {
-                    $("#usr").text(data !== "" ? "Tere, " + data + "! ✔" : "Sisesta laenutaja/tagastaja PIN ✘")
+                    $("#usr").text(data !== "" ? "Tere, " + data + "! ✔" : "Sisesta printeri kood ✘")
                         .removeClass("valid invalid").addClass(data !== "" ? "valid" : "invalid");
                 }
             }

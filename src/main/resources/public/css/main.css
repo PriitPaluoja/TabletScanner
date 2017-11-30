@@ -46,3 +46,13 @@ body {
 .valid {
     color: green;
 }
+
+/* BUTTON */
+.btn.btn-xlarge {
+    padding: 68px 78px;
+    font-size: 42px;
+    line-height: normal;
+    /*-webkit-border-radius: 8px;*/
+    /*-moz-border-radius: 8px;*/
+    /*border-radius: 8px;*/
+}
