@@ -49,13 +49,13 @@ body {
 
 /* BUTTON */
 .btn.btn-xlarge {
-    padding: 68px 78px;
+    padding: 48px 58px;
     font-size: 52px;
     line-height: normal;
 }
 
 .btn.btn-mlarge {
-    padding: 38px 48px;
+    padding: 28px 38px;
     font-size: 52px;
     line-height: normal;
 }
