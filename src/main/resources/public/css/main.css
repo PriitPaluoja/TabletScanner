@@ -59,3 +59,9 @@ body {
     font-size: 52px;
     line-height: normal;
 }
+
+.btn.btn-smlarge {
+    padding: 15px 10px;
+    font-size: 32px;
+    line-height: normal;
+}
