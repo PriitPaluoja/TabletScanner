@@ -81,7 +81,7 @@ $(document).ready(function () {
 
     function callDeviceUsagePieChart() {
         $.ajax({
-            url: window.location.origin + "/history_chart_device",
+            url: window.location.href + "_chart_device",
             type: 'GET',
             cache: false,
             success: function (data) {
@@ -117,7 +117,7 @@ $(document).ready(function () {
 
     function callUserUsagePieChart() {
         $.ajax({
-            url: window.location.origin + "/history_chart_user",
+            url: window.location.href + "_chart_user",
             type: 'GET',
             cache: false,
             success: function (data) {
