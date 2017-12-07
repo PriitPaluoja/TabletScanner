@@ -129,6 +129,7 @@ public class DataSaveServiceImpl implements DataSaveService {
     public List<ArrayList<String>> getUserUsageStat() {
         return new ArrayList<>(getAllRentals().stream()
                 .map(RentalDTO::getUser)
+                .filter(UserDTO::getActive)
                 .map(UserDTO::getPin)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
                 .entrySet())
