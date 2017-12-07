@@ -15,6 +15,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -121,6 +123,31 @@ public class DataSaveServiceImpl implements DataSaveService {
     @Override
     public String getUserFirstName(String pin) {
         return userRepository.findByPin(pin).get().getFirstName();
+    }
+
+    @Override
+    public List<ArrayList<String>> getUserUsageStat() {
+        return new ArrayList<>(getAllRentals().stream()
+                .map(RentalDTO::getUser)
+                .map(UserDTO::getPin)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet())
+                .stream()
+                .map(e -> new ArrayList<>(Arrays.asList(e.getKey(), e.getValue().toString())))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ArrayList<String>> getDeviceUsageStat() {
+        return new ArrayList<>((getAllRentals()).stream()
+                .map(RentalDTO::getDevices)
+                .filter(DeviceDTO::getActive)
+                .map(DeviceDTO::getDeviceIdentification)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet())
+                .stream()
+                .map(e -> new ArrayList<>(Arrays.asList(e.getKey(), e.getValue().toString())))
+                .collect(Collectors.toList());
     }
 
     private Function<Rental, RentalDTO> convertRentalToDTO() {

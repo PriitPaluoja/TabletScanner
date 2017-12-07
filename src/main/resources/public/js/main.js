@@ -73,4 +73,79 @@ $(document).ready(function () {
     $('.modal').on('shown.bs.modal', function () {
         $(this).find('[autofocus]').focus();
     });
+
+    // Load the Visualization API and the corechart package.
+    google.charts.load('current', {'packages': ['corechart']});
+
+    var tabletHistory = [];
+
+    function callDeviceUsagePieChart() {
+        $.ajax({
+            url: window.location.origin + "/history_chart_device",
+            type: 'GET',
+            cache: false,
+            success: function (data) {
+                data.forEach(function (entry) {
+                    tabletHistory.push([entry[0], parseInt(entry[1])]);
+                });
+                google.charts.setOnLoadCallback(pieChartDeviceUsage);
+            }
+        });
+    }
+
+    function pieChartDeviceUsage() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Seade');
+        data.addColumn('number', 'Kasutusi');
+        data.addRows(tabletHistory);
+        var options = {
+            title: "Seadme kasutuste arv",
+            width: 500,
+            height: 500,
+            vAxis: {viewWindowMode: "explicit", viewWindow: {min: 0}}
+        };
+        new google.visualization.PieChart(document.getElementById("piechart_device")).draw(data, options);
+    }
+
+    if ($("#piechart_device").length) {
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(callDeviceUsagePieChart);
+    }
+
+
+    var userHistory = [];
+
+    function callUserUsagePieChart() {
+        $.ajax({
+            url: window.location.origin + "/history_chart_user",
+            type: 'GET',
+            cache: false,
+            success: function (data) {
+                data.forEach(function (entry) {
+                    userHistory.push([entry[0], parseInt(entry[1])]);
+                });
+                google.charts.setOnLoadCallback(pieChartUserUsage);
+            }
+        });
+    }
+
+    function pieChartUserUsage() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'PIN');
+        data.addColumn('number', 'Kasutusi');
+        data.addRows(userHistory);
+        var options = {
+            title: "Kasutaja aktiivsus",
+            width: 500,
+            height: 500,
+            vAxis: {viewWindowMode: "explicit", viewWindow: {min: 0}}
+        };
+        new google.visualization.PieChart(document.getElementById("piechart_user")).draw(data, options);
+    }
+
+
+    if ($("#piechart_user").length) {
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(callUserUsagePieChart);
+    }
 });

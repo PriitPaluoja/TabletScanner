@@ -7,6 +7,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Controller for handling various statistical queries. Accessible only to admin.
@@ -39,5 +43,17 @@ public class StatisticsController {
     public String devicePage(Model model) {
         model.addAttribute("devices", dataSaveService.getAllDevices());
         return "devices";
+    }
+
+    @GetMapping("/history_chart_device")
+    @ResponseBody
+    public List<ArrayList<String>> deviceChart() {
+        return dataSaveService.getDeviceUsageStat();
+    }
+
+    @GetMapping("/history_chart_user")
+    @ResponseBody
+    public List<ArrayList<String>> userChart() {
+        return dataSaveService.getUserUsageStat();
     }
 }

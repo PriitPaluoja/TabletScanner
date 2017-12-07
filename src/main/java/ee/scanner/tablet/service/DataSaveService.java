@@ -6,6 +6,7 @@ import ee.scanner.tablet.exception.IdNotPresentException;
 import ee.scanner.tablet.exception.PinDuplicateException;
 import ee.scanner.tablet.exception.PinNotPresentException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface DataSaveService {
@@ -69,4 +70,14 @@ public interface DataSaveService {
      * @return user first name if user present, else return empty string.
      */
     String getUserFirstName(String pin);
+
+    /**
+     * @return user statistics for pie chart
+     */
+    List<ArrayList<String>> getUserUsageStat();
+
+    /**
+     * @return device statistics for pie chart
+     */
+    List<ArrayList<String>> getDeviceUsageStat();
 }
