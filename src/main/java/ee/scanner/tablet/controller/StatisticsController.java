@@ -52,19 +52,25 @@ public class StatisticsController {
 
     @GetMapping("/chart_chart_device")
     @ResponseBody
-    public List<ArrayList<String>> deviceChart() {
+    public List<List<String>> deviceChart() {
         return dataSaveService.getDeviceUsageStat();
     }
 
     @GetMapping("/chart_chart_user")
     @ResponseBody
-    public List<ArrayList<String>> userChart() {
+    public List<List<String>> userChart() {
         return dataSaveService.getUserUsageStat();
     }
 
     @GetMapping("/chart_chart_month")
     @ResponseBody
-    public List<ArrayList<Integer>> monthChart() {
+    public List<List<Integer>> monthChart() {
         return dataSaveService.getMonthlyUsageStat();
+    }
+
+    @GetMapping("/chart_chart_day")
+    @ResponseBody
+    public List<Integer> dayHistogramChart() {
+        return dataSaveService.getDeviceUsageCountHistPerDay();
     }
 }

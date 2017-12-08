@@ -74,15 +74,20 @@ public interface DataSaveService {
     /**
      * @return user statistics for pie chart
      */
-    List<ArrayList<String>> getUserUsageStat();
+    List<List<String>> getUserUsageStat();
 
     /**
      * @return device statistics for pie chart
      */
-    List<ArrayList<String>> getDeviceUsageStat();
+    List<List<String>> getDeviceUsageStat();
 
     /**
      * @return device total usage for current year
      */
-    List<ArrayList<Integer>> getMonthlyUsageStat();
+    List<List<Integer>> getMonthlyUsageStat();
+
+    /**
+     * @return device usage per day for histogram
+     */
+    List<Integer> getDeviceUsageCountHistPerDay();
 }

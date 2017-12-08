@@ -126,7 +126,7 @@ public class DataSaveServiceImpl implements DataSaveService {
     }
 
     @Override
-    public List<ArrayList<String>> getUserUsageStat() {
+    public List<List<String>> getUserUsageStat() {
         return new ArrayList<>(getAllRentals().stream()
                 .map(RentalDTO::getUser)
                 .filter(UserDTO::getActive)
@@ -139,7 +139,7 @@ public class DataSaveServiceImpl implements DataSaveService {
     }
 
     @Override
-    public List<ArrayList<String>> getDeviceUsageStat() {
+    public List<List<String>> getDeviceUsageStat() {
         return new ArrayList<>((getAllRentals()).stream()
                 .map(RentalDTO::getDevices)
                 .filter(DeviceDTO::getActive)
@@ -152,18 +152,31 @@ public class DataSaveServiceImpl implements DataSaveService {
     }
 
     @Override
-    public List<ArrayList<Integer>> getMonthlyUsageStat() {
+    public List<List<Integer>> getMonthlyUsageStat() {
         Map<Integer, Long> t = getAllRentals().stream()
                 .map(RentalDTO::getRentalTime)
                 .filter(date -> date.getYear() == Calendar.getInstance().get(Calendar.YEAR))
                 .map(LocalDateTime::getMonthValue)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
-        List<ArrayList<Integer>> out = new ArrayList<>();
+        List<List<Integer>> out = new ArrayList<>();
         for (Integer i = 1; i <= 12; i++) {
             out.add(new ArrayList<>(Arrays.asList(i, (t.containsKey(i) ? t.get(i).intValue() : 0))));
         }
         return out;
+    }
+
+    @Override
+    public List<Integer> getDeviceUsageCountHistPerDay() {
+        return rentalRepository.findAll().stream()
+                .map(Rental::getRentalTime)
+                .filter(date -> date.getYear() == Calendar.getInstance().get(Calendar.YEAR))
+                .map(LocalDateTime::getDayOfYear)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .values()
+                .stream()
+                .map(Long::intValue)
+                .collect(Collectors.toList());
     }
 
     private Function<Rental, RentalDTO> convertRentalToDTO() {

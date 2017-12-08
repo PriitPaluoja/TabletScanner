@@ -183,4 +183,43 @@ $(document).ready(function () {
         // Set a callback to run when the Google Visualization API is loaded.
         google.charts.setOnLoadCallback(callLineUsageMonthly);
     }
+
+    /////////
+
+
+    var hist = [];
+
+    function callUsageHist() {
+        $.ajax({
+            url: window.location.href + "_chart_day",
+            type: 'GET',
+            cache: false,
+            success: function (data) {
+                data.forEach(function (entry) {
+                    hist.push([entry]);
+                });
+                google.charts.setOnLoadCallback(usageHist);
+            }
+        });
+    }
+
+    function usageHist() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'Kasutusi');
+        data.addRows(hist);
+        var options = {
+            title: "Histogramm: päevade arv, kus kasutati X korda seadet päevas",
+            width: 800,
+            height: 500,
+            vAxis: {title: "Laenutusi", viewWindowMode: "explicit", viewWindow: {min: 0}},
+            hAxis: {title: "Päevi"}
+        };
+        new google.visualization.Histogram(document.getElementById("hist_day")).draw(data, options);
+    }
+
+
+    if ($("#hist_day").length) {
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(callUsageHist);
+    }
 });
