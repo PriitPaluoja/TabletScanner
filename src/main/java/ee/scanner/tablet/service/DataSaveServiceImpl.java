@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +28,11 @@ public class DataSaveServiceImpl implements DataSaveService {
     private final UserRepository userRepository;
     private final DeviceRepository deviceRepository;
     private final RentalRepository rentalRepository;
+
+    private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
+    }
 
     @Override
     public void saveDevice(DeviceDTO deviceDTO) throws DeviceDuplicateException {
@@ -69,6 +76,7 @@ public class DataSaveServiceImpl implements DataSaveService {
                 deviceUser.getFirstName(),
                 deviceUser.getLastName(),
                 rentalRepository.countAllByUserPin(deviceUser.getPin()),
+                rentalRepository.findByUserPin(deviceUser.getPin()).stream().map(Rental::getRentalTime).distinct().count(),
                 deviceUser.getPin(),
                 deviceUser.getActive());
     }
@@ -128,6 +136,7 @@ public class DataSaveServiceImpl implements DataSaveService {
     @Override
     public List<List<String>> getUserUsageStat() {
         return new ArrayList<>(getAllRentals().stream()
+                .filter(distinctByKey(RentalDTO::getRentalTime))
                 .map(RentalDTO::getUser)
                 .filter(UserDTO::getActive)
                 .map(UserDTO::getPin)

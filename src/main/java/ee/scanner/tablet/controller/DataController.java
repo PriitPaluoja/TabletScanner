@@ -130,6 +130,7 @@ public class DataController {
                 "First name," +
                 "Last name, " +
                 "Active," +
+                "Total rented devices," +
                 "Total rentals\n" +
                 (dataSaveService.getAllUsers().getUsers().stream()
                         .map(Object::toString)

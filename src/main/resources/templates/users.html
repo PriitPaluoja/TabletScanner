@@ -28,7 +28,8 @@
                     <tr>
                         <th>Eesnimi</th>
                         <th>Perenimi</th>
-                        <th>Laenutusi kokku</th>
+                        <th>Laenutatud seadmeid</th>
+                        <th>Laenutuste arv</th>
                         <th>PIN</th>
                         <th>Aktiivne</th>
                         <th>Uuenda</th>
@@ -38,7 +39,8 @@
                     <tr th:each="usr, int : ${users.getUsers()}">
                         <td th:text="${usr.getFirstName()}"></td>
                         <td th:text="${usr.getLastName()}"></td>
-                        <td th:text="${usr.getTotalRentals()}"></td>
+                        <td th:text="${usr.getTotalRentedDevices()}"></td>
+                        <td th:text="${usr.getTotalRentalCount()}"></td>
                         <td th:text="${usr.getPin()}"></td>
                         <td th:text="${usr.getActive() ? ' ✔' :'✗'}"></td>
                         <td>

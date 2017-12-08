@@ -209,7 +209,7 @@ $(document).ready(function () {
         data.addColumn('number', 'Kasutusi');
         data.addRows(hist);
         var options = {
-            title: "Histogramm: seadmete välja laenutamine päevade vahemike lõikes",
+            title: "Histogramm: seadmete välja laenutamine päevade vahemike lõikes (käesolev aasta). Näiteks 2-5.5 tähendab, et päevi, kus laenutati X seadet, on olnud sellel aastal 2.5.",
             width: 800,
             height: 500,
             vAxis: {title: "Laenutusi", viewWindowMode: "explicit", viewWindow: {min: 0}},
