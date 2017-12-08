@@ -23,6 +23,8 @@ public class UserManagementDTO {
     @NotBlank
     private String lastName;
 
+    private Integer totalRentals;
+
     @Length(max = 10)
     private String pin;
 
@@ -30,6 +32,6 @@ public class UserManagementDTO {
 
     @Override
     public String toString() {
-        return pin + "," + firstName + "," + lastName + "," + active;
+        return pin + "," + firstName + "," + lastName + "," + active + "," + totalRentals;
     }
 }

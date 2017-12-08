@@ -129,7 +129,8 @@ public class DataController {
         return ("User PIN, " +
                 "First name," +
                 "Last name, " +
-                "Active\n" +
+                "Active," +
+                "Total rentals\n" +
                 (dataSaveService.getAllUsers().getUsers().stream()
                         .map(Object::toString)
                         .collect(Collectors.joining("\n"))))

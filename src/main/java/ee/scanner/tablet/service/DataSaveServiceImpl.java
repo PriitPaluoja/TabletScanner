@@ -68,6 +68,7 @@ public class DataSaveServiceImpl implements DataSaveService {
         return deviceUser -> new UserManagementDTO(deviceUser.getId(),
                 deviceUser.getFirstName(),
                 deviceUser.getLastName(),
+                rentalRepository.countAllByUserPin(deviceUser.getPin()),
                 deviceUser.getPin(),
                 deviceUser.getActive());
     }
