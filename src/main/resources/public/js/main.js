@@ -173,7 +173,8 @@ $(document).ready(function () {
             title: "Seadmete kasutus käesoleva aasta lõikes",
             width: 800,
             height: 500,
-            vAxis: {viewWindowMode: "explicit", viewWindow: {min: 0}}
+            vAxis: {title: "Laenutusi", viewWindowMode: "explicit", viewWindow: {min: 0}},
+            hAxis: {title: "Kuu"}
         };
         new google.visualization.LineChart(document.getElementById("line_month")).draw(data, options);
     }
