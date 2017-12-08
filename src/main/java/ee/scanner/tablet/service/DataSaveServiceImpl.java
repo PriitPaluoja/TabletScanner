@@ -173,9 +173,7 @@ public class DataSaveServiceImpl implements DataSaveService {
                         e.getUser().getLastName(),
                         e.getUser().getPin(),
                         e.getUser().getActive()),
-                new DeviceDTO(e.getDevice().getId(),
-                        e.getDevice().getIdent(),
-                        e.getDevice().getActive()),
+                deviceDTO().apply(e.getDevice()),
                 e.getRentalTime(),
                 e.getReturnTime(),
                 e.getIsReturned(),
@@ -196,6 +194,6 @@ public class DataSaveServiceImpl implements DataSaveService {
     }
 
     private Function<Device, DeviceDTO> deviceDTO() {
-        return device -> new DeviceDTO(device.getId(), device.getIdent(), device.getActive());
+        return device -> new DeviceDTO(device.getId(), device.getIdent(), device.getActive(), rentalRepository.countAllByDeviceIdent(device.getIdent()));
     }
 }

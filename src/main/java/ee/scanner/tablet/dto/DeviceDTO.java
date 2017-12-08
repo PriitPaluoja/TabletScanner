@@ -21,8 +21,10 @@ public class DeviceDTO {
 
     private Boolean active;
 
+    private Integer totalRentals;
+
     @Override
     public String toString() {
-        return deviceIdentification + ',' + active;
+        return deviceIdentification + ',' + totalRentals + ',' + active;
     }
 }

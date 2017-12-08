@@ -140,7 +140,8 @@ public class DataController {
     @ResponseBody
     public byte[] devicesCsv(HttpServletResponse response) throws IOException {
         response.setHeader("Content-Disposition", "attachment; filename=devices.csv");
-        return ("Device, " +
+        return ("Device," +
+                "Rentals," +
                 "Active\n" +
                 (dataSaveService.getAllDevices().getDevices().stream()
                         .map(Object::toString)

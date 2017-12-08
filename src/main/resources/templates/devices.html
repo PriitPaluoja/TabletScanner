@@ -30,6 +30,7 @@
                     <tr>
                         <th>Idendifikaator</th>
                         <th>Aktiivne</th>
+                        <th>Laenutusi</th>
                         <th>Muuda</th>
                     </tr>
                     </thead>
@@ -37,6 +38,7 @@
                     <tr th:each="dev, int : ${devices.getDevices()}">
                         <td th:text="${dev.getDeviceIdentification()}"></td>
                         <td th:text="${dev.getActive() ? ' ✔' :'✗'}"></td>
+                        <td th:text="${dev.getTotalRentals()}"></td>
                         <td>
                             <button type="button" class="btn btn-default" data-toggle="modal" th:attr="data-target='#modal'+${dev.getId()}">Muuda andmeid</button>
                             <div th:id="'modal'+${dev.getId()}" class="modal fade" role="dialog">
