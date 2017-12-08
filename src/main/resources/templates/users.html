@@ -19,101 +19,101 @@
     <div th:replace="fragments/feedback :: feedback-messages (feedbackList=${feedbackList})"></div>
 
     <!--/*@thymesVar id="users" type="ee.scanner.tablet.dto.UserWrapperDTO"*/-->
+    <div class="panel panel-default">
+        <div class="panel-heading">Kasutajad <span><a th:href="@{/users_csv}">Ekspordi</a></span></div>
+        <div class="panel-body">
+            <table id="usrs" class="table table-hover display">
+                <thead>
+                <tr>
+                    <th>Eesnimi</th>
+                    <th>Perenimi</th>
+                    <th>Laenutatud seadmeid</th>
+                    <th>Laenutuste arv</th>
+                    <th>PIN</th>
+                    <th>Aktiivne</th>
+                    <th>Uuenda</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="usr, int : ${users.getUsers()}">
+                    <td th:text="${usr.getFirstName()}"></td>
+                    <td th:text="${usr.getLastName()}"></td>
+                    <td th:text="${usr.getTotalRentedDevices()}"></td>
+                    <td th:text="${usr.getTotalRentalCount()}"></td>
+                    <td th:text="${usr.getPin()}"></td>
+                    <td th:text="${usr.getActive() ? ' ✔' :'✗'}"></td>
+                    <td>
+                        <button type="button" class="btn btn-default" data-toggle="modal" th:attr="data-target='#modal'+${usr.getId()}">Muuda andmeid</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <form th:object="${users}" th:action="@{/update_user}" method="post">
-        <div class="panel panel-default">
-            <div class="panel-heading">Kasutajad <span><a th:href="@{/users_csv}">Ekspordi</a></span></div>
-            <div class="panel-body">
-                <table id="usrs" class="table table-hover display">
-                    <thead>
-                    <tr>
-                        <th>Eesnimi</th>
-                        <th>Perenimi</th>
-                        <th>Laenutatud seadmeid</th>
-                        <th>Laenutuste arv</th>
-                        <th>PIN</th>
-                        <th>Aktiivne</th>
-                        <th>Uuenda</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="usr, int : ${users.getUsers()}">
-                        <td th:text="${usr.getFirstName()}"></td>
-                        <td th:text="${usr.getLastName()}"></td>
-                        <td th:text="${usr.getTotalRentedDevices()}"></td>
-                        <td th:text="${usr.getTotalRentalCount()}"></td>
-                        <td th:text="${usr.getPin()}"></td>
-                        <td th:text="${usr.getActive() ? ' ✔' :'✗'}"></td>
-                        <td>
-                            <button type="button" class="btn btn-default" data-toggle="modal" th:attr="data-target='#modal'+${usr.getId()}">Muuda andmeid</button>
-                            <div th:id="'modal'+${usr.getId()}" class="modal fade" role="dialog">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <div class="modal-title">Redigeeri kasutajat</div>
-                                        </div>
+        <div th:each="usr, int : ${users.getUsers()}">
+            <div th:id="'modal'+${usr.getId()}" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-title">Redigeeri kasutajat</div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <input type="hidden" th:field="*{users[__${int.index}__].id}"/>
+                            </div>
 
-                                        <div class="modal-body">
-                                            <div class="form-group">
-                                                <input type="hidden" th:field="*{users[__${int.index}__].id}"/>
-                                            </div>
-
-                                            <div class="panel panel-default">
-                                                <div class="panel-body form-group">
-                                                    <label th:for="${#fields.idFromName('firstName')}">Eesnimi:</label>
-                                                    <input type="text"
-                                                           class="form-control"
-                                                           th:field="*{users[__${int.index}__].firstName}"/>
-                                                </div>
-                                            </div>
-
-                                            <div class="panel panel-default">
-                                                <div class="form-group panel-body ">
-                                                    <label th:for="${#fields.idFromName('lastName')}">Perenimi:</label>
-                                                    <input type="text"
-                                                           class="form-control"
-                                                           th:field="*{users[__${int.index}__].lastName}"/>
-                                                </div>
-                                            </div>
-
-                                            <div class="panel panel-default">
-                                                <div class="form-group panel-body ">
-                                                    <label th:for="${#fields.idFromName('pin')}">PIN:</label>
-                                                    <input type="text"
-                                                           class="form-control"
-                                                           th:field="*{users[__${int.index}__].pin}"/>
-                                                </div>
-                                            </div>
-
-                                            <div class="panel panel-default">
-                                                <div class="form-group panel-body">
-
-                                                    <label>Aktiivne:</label>
-                                                    <label class="radio-inline">
-                                                        <input th:field="*{users[__${int.index}__].active}"
-                                                               type="radio"
-                                                               th:value="true"/>
-                                                        &#10004;
-                                                    </label>
-                                                    <label class="radio-inline">
-                                                        <input th:field="*{users[__${int.index}__].active}"
-                                                               type="radio"
-                                                               th:value="false"/>
-                                                        &#10006;
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary">Uuenda</button>
-                                        </div>
-
-                                    </div>
+                            <div class="panel panel-default">
+                                <div class="panel-body form-group">
+                                    <label th:for="${#fields.idFromName('firstName')}">Eesnimi:</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           th:field="*{users[__${int.index}__].firstName}"/>
                                 </div>
                             </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+
+                            <div class="panel panel-default">
+                                <div class="form-group panel-body ">
+                                    <label th:for="${#fields.idFromName('lastName')}">Perenimi:</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           th:field="*{users[__${int.index}__].lastName}"/>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <div class="form-group panel-body ">
+                                    <label th:for="${#fields.idFromName('pin')}">PIN:</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           th:field="*{users[__${int.index}__].pin}"/>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <div class="form-group panel-body">
+
+                                    <label>Aktiivne:</label>
+                                    <label class="radio-inline">
+                                        <input th:field="*{users[__${int.index}__].active}"
+                                               type="radio"
+                                               th:value="true"/>
+                                        &#10004;
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input th:field="*{users[__${int.index}__].active}"
+                                               type="radio"
+                                               th:value="false"/>
+                                        &#10006;
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Uuenda</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </form>
