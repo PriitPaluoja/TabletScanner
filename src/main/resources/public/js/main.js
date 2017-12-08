@@ -213,7 +213,7 @@ $(document).ready(function () {
             width: 800,
             height: 500,
             vAxis: {title: "Laenutusi", viewWindowMode: "explicit", viewWindow: {min: 0}},
-            hAxis: {title: "Päevi"}
+            hAxis: {title: "Päevade arvu vahemik"}
         };
         new google.visualization.Histogram(document.getElementById("hist_day")).draw(data, options);
     }
