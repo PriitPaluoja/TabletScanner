@@ -17,14 +17,6 @@
 
     <!--/*@thymesVar id="feedbackList" type="java.util.List<ee.scanner.tablet.feedback.Feedback>"*/-->
     <div th:replace="fragments/feedback :: feedback-messages (feedbackList=${feedbackList})"></div>
-    <div class="row">
-        <div class="col-sm-6">
-            <div id="piechart_device"></div>
-        </div>
-        <div class="col-sm-6">
-            <div id="piechart_user"></div>
-        </div>
-    </div>
 
     <div class="panel panel-default">
         <div class="panel-heading">Laenutuste ajalugu <span><a th:href="@{/history_csv}">Ekspordi</a></span></div>
@@ -59,7 +51,6 @@
             </table>
         </div>
     </div>
-
 </div>
 </body>
 </html>

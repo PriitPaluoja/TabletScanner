@@ -99,7 +99,7 @@ $(document).ready(function () {
         data.addColumn('number', 'Kasutusi');
         data.addRows(tabletHistory);
         var options = {
-            title: "Seadme kasutuste arv",
+            title: "Aktiivsete seadmete kasutuste arv kokku",
             width: 500,
             height: 500,
             vAxis: {viewWindowMode: "explicit", viewWindow: {min: 0}}
@@ -135,7 +135,7 @@ $(document).ready(function () {
         data.addColumn('number', 'Kasutusi');
         data.addRows(userHistory);
         var options = {
-            title: "Kasutaja aktiivsus",
+            title: "Aktiveeritud kasutajate aktiivsus",
             width: 500,
             height: 500,
             vAxis: {viewWindowMode: "explicit", viewWindow: {min: 0}}
@@ -147,5 +147,40 @@ $(document).ready(function () {
     if ($("#piechart_user").length) {
         // Set a callback to run when the Google Visualization API is loaded.
         google.charts.setOnLoadCallback(callUserUsagePieChart);
+    }
+    var monthHistory = [];
+
+    function callLineUsageMonthly() {
+        $.ajax({
+            url: window.location.href + "_chart_month",
+            type: 'GET',
+            cache: false,
+            success: function (data) {
+                data.forEach(function (entry) {
+                    monthHistory.push([entry[0], entry[1]]);
+                });
+                google.charts.setOnLoadCallback(lineUsageMonthly);
+            }
+        });
+    }
+
+    function lineUsageMonthly() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'Päev');
+        data.addColumn('number', 'Kasutusi');
+        data.addRows(monthHistory);
+        var options = {
+            title: "Seadmete kasutus käesoleva aasta lõikes",
+            width: 800,
+            height: 500,
+            vAxis: {viewWindowMode: "explicit", viewWindow: {min: 0}}
+        };
+        new google.visualization.LineChart(document.getElementById("line_month")).draw(data, options);
+    }
+
+
+    if ($("#line_month").length) {
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(callLineUsageMonthly);
     }
 });

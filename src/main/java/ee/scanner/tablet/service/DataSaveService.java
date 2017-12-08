@@ -80,4 +80,9 @@ public interface DataSaveService {
      * @return device statistics for pie chart
      */
     List<ArrayList<String>> getDeviceUsageStat();
+
+    /**
+     * @return device total usage for current year
+     */
+    List<ArrayList<Integer>> getMonthlyUsageStat();
 }

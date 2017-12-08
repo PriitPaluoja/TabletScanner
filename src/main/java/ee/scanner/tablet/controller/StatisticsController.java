@@ -27,6 +27,11 @@ public class StatisticsController {
         return "stat";
     }
 
+    @GetMapping("/chart")
+    public String chartsPage() {
+        return "graphs";
+    }
+
     @GetMapping("/history")
     public String historyPage(Model model) {
         model.addAttribute("rentalsHistory", dataSaveService.getAllRentals());
@@ -45,15 +50,21 @@ public class StatisticsController {
         return "devices";
     }
 
-    @GetMapping("/history_chart_device")
+    @GetMapping("/chart_chart_device")
     @ResponseBody
     public List<ArrayList<String>> deviceChart() {
         return dataSaveService.getDeviceUsageStat();
     }
 
-    @GetMapping("/history_chart_user")
+    @GetMapping("/chart_chart_user")
     @ResponseBody
     public List<ArrayList<String>> userChart() {
         return dataSaveService.getUserUsageStat();
+    }
+
+    @GetMapping("/chart_chart_month")
+    @ResponseBody
+    public List<ArrayList<Integer>> monthChart() {
+        return dataSaveService.getMonthlyUsageStat();
     }
 }

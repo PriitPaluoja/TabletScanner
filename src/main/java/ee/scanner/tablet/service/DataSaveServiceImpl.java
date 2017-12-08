@@ -15,9 +15,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -149,6 +148,21 @@ public class DataSaveServiceImpl implements DataSaveService {
                 .stream()
                 .map(e -> new ArrayList<>(Arrays.asList(e.getKey(), e.getValue().toString())))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ArrayList<Integer>> getMonthlyUsageStat() {
+        Map<Integer, Long> t = getAllRentals().stream()
+                .map(RentalDTO::getRentalTime)
+                .filter(date -> date.getYear() == Calendar.getInstance().get(Calendar.YEAR))
+                .map(LocalDateTime::getMonthValue)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        List<ArrayList<Integer>> out = new ArrayList<>();
+        for (Integer i = 1; i <= 12; i++) {
+            out.add(new ArrayList<>(Arrays.asList(i, (t.containsKey(i) ? t.get(i).intValue() : 0))));
+        }
+        return out;
     }
 
     private Function<Rental, RentalDTO> convertRentalToDTO() {
