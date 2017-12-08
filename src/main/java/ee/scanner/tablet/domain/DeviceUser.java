@@ -22,4 +22,8 @@ public class DeviceUser {
     private String lastName;
     private String pin;
     private Boolean active;
+
+    public String getName() {
+        return firstName + " " + lastName;
+    }
 }

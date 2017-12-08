@@ -133,7 +133,7 @@ public class DataSaveServiceImpl implements DataSaveService {
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
                 .entrySet())
                 .stream()
-                .map(e -> new ArrayList<>(Arrays.asList(e.getKey(), e.getValue().toString())))
+                .map(e -> new ArrayList<>(Arrays.asList(userRepository.findByPin(e.getKey()).get().getName(), e.getValue().toString())))
                 .collect(Collectors.toList());
     }
 
