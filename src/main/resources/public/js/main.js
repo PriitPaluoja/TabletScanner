@@ -206,14 +206,15 @@ $(document).ready(function () {
 
     function usageHist() {
         var data = new google.visualization.DataTable();
-        data.addColumn('number', 'Kasutusi');
+        data.addColumn('number', 'Seadmeid');
         data.addRows(hist);
         var options = {
-            title: "Histogramm: seadmete välja laenutamine päevade vahemike lõikes (käesolev aasta). Näiteks 2-5.5 tähendab, et päevi, kus laenutati X seadet, on olnud sellel aastal 2.5.",
+            title: "Laenutavate seadmete kogus",
             width: 800,
             height: 500,
-            vAxis: {title: "Laenutusi", viewWindowMode: "explicit", viewWindow: {min: 0}},
-            hAxis: {title: "Päevade arvu vahemik"}
+            vAxis: {title: "Laenutuste arv", viewWindowMode: "explicit", viewWindow: {min: 0}},
+            hAxis: {title: "Seadmete arv"},
+            histogram: {bucketSize: 1}
         };
         new google.visualization.Histogram(document.getElementById("hist_day")).draw(data, options);
     }
