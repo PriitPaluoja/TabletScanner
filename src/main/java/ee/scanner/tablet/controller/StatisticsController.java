@@ -73,4 +73,10 @@ public class StatisticsController {
     public List<Integer> dayHistogramChart() {
         return dataSaveService.getDeviceUsageCountHistPerDay();
     }
+
+    @GetMapping("/chart_chart_overall")
+    @ResponseBody
+    public List<List<Integer>> calendarChart() {
+        return dataSaveService.getOverallDevicePerDay();
+    }
 }

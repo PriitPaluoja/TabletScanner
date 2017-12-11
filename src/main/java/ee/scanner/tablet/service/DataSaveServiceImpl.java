@@ -188,6 +188,18 @@ public class DataSaveServiceImpl implements DataSaveService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<List<Integer>> getOverallDevicePerDay() {
+        List<List<Integer>> out = new ArrayList<>();
+
+        getAllRentals().stream()
+                .map(RentalDTO::getRentalTime)
+                .map(LocalDateTime::toLocalDate)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .forEach((key, value) -> out.add(Arrays.asList(key.getDayOfMonth(), key.getMonthValue(), key.getYear(), value.intValue())));
+        return out;
+    }
+
     private Function<Rental, RentalDTO> convertRentalToDTO() {
         return e -> new RentalDTO(
                 e.getId(),

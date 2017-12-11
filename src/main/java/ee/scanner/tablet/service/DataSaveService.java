@@ -90,4 +90,9 @@ public interface DataSaveService {
      * @return device usage per day for histogram
      */
     List<Integer> getDeviceUsageCountHistPerDay();
+
+    /**
+     * @return overall device usage per day as [[day month year usage]]
+     */
+    List<List<Integer>> getOverallDevicePerDay();
 }

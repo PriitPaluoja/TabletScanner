@@ -75,7 +75,7 @@ $(document).ready(function () {
     });
 
     // Load the Visualization API and the corechart package.
-    google.charts.load('current', {'packages': ['corechart', 'line']});
+    google.charts.load('current', {'packages': ['corechart', 'line', 'calendar']});
 
     var tabletHistory = [];
 
@@ -179,6 +179,7 @@ $(document).ready(function () {
         });
     }
 
+
     function usageHist() {
         var data = new google.visualization.DataTable();
         data.addColumn('number', 'Seadmeid');
@@ -191,6 +192,43 @@ $(document).ready(function () {
             histogram: {bucketSize: 1}
         };
         new google.visualization.Histogram(document.getElementById("hist_day")).draw(data, options);
+    }
+
+    var overall = [];
+
+    function callOverall() {
+        $.ajax({
+            url: window.location.href + "_chart_overall", type: 'GET', cache: false,
+            success: function (data) {
+                data.forEach(function (entry) {
+                    overall.push([new Date(entry[2], entry[1] - 1, entry[0]), entry[3]]);
+                });
+                google.charts.setOnLoadCallback(overallChart);
+            }
+        });
+    }
+
+    function overallChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn({type: 'date'});
+        data.addColumn({type: 'number'});
+        data.addRows(overall);
+        var options = {
+            title: "Laenutusi päevade lõikes",
+            calendar: {
+                dayOfWeekLabel: {
+                    fontName: 'Times-Roman',
+                    fontSize: 12,
+                    cellSize: 10,
+                    color: '#1a8763',
+                    bold: true,
+                    italic: true
+                },
+                dayOfWeekRightSpace: 10,
+                daysOfWeek: 'PETKNRL'
+            }
+        };
+        new google.visualization.Calendar(document.getElementById("overall")).draw(data, options);
     }
 
 
@@ -213,10 +251,15 @@ $(document).ready(function () {
         // Set a callback to run when the Google Visualization API is loaded.
         google.charts.setOnLoadCallback(callUsageHist);
     }
+    if ($("#overall").length) {
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(callOverall);
+    }
 
     function resizeChart() {
         if ($("#line_month").length) lineUsageMonthly();
         if ($("#hist_day").length) usageHist();
+        if ($("#overall").length) overallChart();
     }
 
     if (document.addEventListener) {
