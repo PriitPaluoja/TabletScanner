@@ -207,7 +207,7 @@ $(document).ready(function () {
         data.addColumn('number', 'Seadmeid');
         data.addRows(hist);
         var options = {
-            title: "Laenutavate seadmete kogus",
+            title: "Laenutavate seadmete kogus käesoleval aastal",
             width: 800,
             height: 500,
             vAxis: {title: "Laenutuste arv", viewWindowMode: "explicit", viewWindow: {min: 0}},
