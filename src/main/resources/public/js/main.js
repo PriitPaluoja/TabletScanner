@@ -219,7 +219,7 @@ $(document).ready(function () {
                 dayOfWeekLabel: {
                     fontName: 'Times-Roman',
                     fontSize: 12,
-                    cellSize: 10,
+                    cellSize: 16,
                     color: '#1a8763',
                     bold: true,
                     italic: true
