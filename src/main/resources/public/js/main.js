@@ -75,15 +75,13 @@ $(document).ready(function () {
     });
 
     // Load the Visualization API and the corechart package.
-    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.load('current', {'packages': ['corechart', 'line']});
 
     var tabletHistory = [];
 
     function callDeviceUsagePieChart() {
         $.ajax({
-            url: window.location.href + "_chart_device",
-            type: 'GET',
-            cache: false,
+            url: window.location.href + "_chart_device", type: 'GET', cache: false,
             success: function (data) {
                 data.forEach(function (entry) {
                     tabletHistory.push([entry[0], parseInt(entry[1])]);
@@ -101,15 +99,9 @@ $(document).ready(function () {
         var options = {
             title: "Aktiivsete seadmete kasutuste arv kokku",
             width: 500,
-            height: 500,
-            vAxis: {viewWindowMode: "explicit", viewWindow: {min: 0}}
+            height: 500
         };
         new google.visualization.PieChart(document.getElementById("piechart_device")).draw(data, options);
-    }
-
-    if ($("#piechart_device").length) {
-        // Set a callback to run when the Google Visualization API is loaded.
-        google.charts.setOnLoadCallback(callDeviceUsagePieChart);
     }
 
 
@@ -117,9 +109,7 @@ $(document).ready(function () {
 
     function callUserUsagePieChart() {
         $.ajax({
-            url: window.location.href + "_chart_user",
-            type: 'GET',
-            cache: false,
+            url: window.location.href + "_chart_user", type: 'GET', cache: false,
             success: function (data) {
                 data.forEach(function (entry) {
                     userHistory.push([entry[0], parseInt(entry[1])]);
@@ -137,52 +127,41 @@ $(document).ready(function () {
         var options = {
             title: "Aktiveeritud kasutajate aktiivsus laenutuste arvu lõikes",
             width: 500,
-            height: 500,
-            vAxis: {viewWindowMode: "explicit", viewWindow: {min: 0}}
+            height: 500
         };
         new google.visualization.PieChart(document.getElementById("piechart_user")).draw(data, options);
     }
 
 
-    if ($("#piechart_user").length) {
-        // Set a callback to run when the Google Visualization API is loaded.
-        google.charts.setOnLoadCallback(callUserUsagePieChart);
-    }
     var monthHistory = [];
+    var months = ["jaanuar", "veebruar", "märts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember"];
 
     function callLineUsageMonthly() {
         $.ajax({
-            url: window.location.href + "_chart_month",
-            type: 'GET',
-            cache: false,
+            url: window.location.href + "_chart_month", type: 'GET', cache: false,
             success: function (data) {
                 data.forEach(function (entry) {
-                    monthHistory.push([entry[0], entry[1]]);
+                    monthHistory.push([months[entry[0] - 1], entry[1]]);
                 });
                 google.charts.setOnLoadCallback(lineUsageMonthly);
             }
         });
     }
 
+
     function lineUsageMonthly() {
         var data = new google.visualization.DataTable();
-        data.addColumn('number', 'Päev');
+        data.addColumn('string', 'Päev');
         data.addColumn('number', 'Kasutusi');
         data.addRows(monthHistory);
         var options = {
             title: "Seadmete kasutus käesoleva aasta lõikes",
-            width: 800,
             height: 500,
-            vAxis: {title: "Laenutusi", viewWindowMode: "explicit", viewWindow: {min: 0}},
+            pointsVisible: true,
+            vAxis: {title: "Laenutusi"},
             hAxis: {title: "Kuu"}
         };
-        new google.visualization.LineChart(document.getElementById("line_month")).draw(data, options);
-    }
-
-
-    if ($("#line_month").length) {
-        // Set a callback to run when the Google Visualization API is loaded.
-        google.charts.setOnLoadCallback(callLineUsageMonthly);
+        new google.charts.Line(document.getElementById("line_month")).draw(data, google.charts.Line.convertOptions(options));
     }
 
 
@@ -190,9 +169,7 @@ $(document).ready(function () {
 
     function callUsageHist() {
         $.ajax({
-            url: window.location.href + "_chart_day",
-            type: 'GET',
-            cache: false,
+            url: window.location.href + "_chart_day", type: 'GET', cache: false,
             success: function (data) {
                 data.forEach(function (entry) {
                     hist.push([entry]);
@@ -208,17 +185,47 @@ $(document).ready(function () {
         data.addRows(hist);
         var options = {
             title: "Laenutavate seadmete kogus käesoleval aastal",
-            width: 800,
             height: 500,
-            vAxis: {title: "Laenutuste arv", viewWindowMode: "explicit", viewWindow: {min: 0}},
+            vAxis: {title: "Laenutuste arv"},
             hAxis: {title: "Seadmete arv"},
             histogram: {bucketSize: 1}
         };
         new google.visualization.Histogram(document.getElementById("hist_day")).draw(data, options);
     }
 
+
+    if ($("#piechart_device").length) {
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(callDeviceUsagePieChart);
+    }
+
+    if ($("#piechart_user").length) {
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(callUserUsagePieChart);
+    }
+
+    if ($("#line_month").length) {
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(callLineUsageMonthly);
+    }
+
     if ($("#hist_day").length) {
         // Set a callback to run when the Google Visualization API is loaded.
         google.charts.setOnLoadCallback(callUsageHist);
+    }
+
+    function resizeChart() {
+        if ($("#line_month").length) lineUsageMonthly();
+        if ($("#hist_day").length) usageHist();
+    }
+
+    if (document.addEventListener) {
+        window.addEventListener('resize', resizeChart);
+    }
+    else if (document.attachEvent) {
+        window.attachEvent('onresize', resizeChart);
+    }
+    else {
+        window.resize = resizeChart;
     }
 });
