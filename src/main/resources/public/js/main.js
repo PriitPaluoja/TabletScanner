@@ -135,7 +135,7 @@ $(document).ready(function () {
         data.addColumn('number', 'Kasutusi');
         data.addRows(userHistory);
         var options = {
-            title: "Aktiveeritud kasutajate aktiivsus",
+            title: "Aktiveeritud kasutajate aktiivsus laenutuste arvu lõikes",
             width: 500,
             height: 500,
             vAxis: {viewWindowMode: "explicit", viewWindow: {min: 0}}
@@ -185,8 +185,6 @@ $(document).ready(function () {
         google.charts.setOnLoadCallback(callLineUsageMonthly);
     }
 
-    /////////
-
 
     var hist = [];
 
@@ -218,7 +216,6 @@ $(document).ready(function () {
         };
         new google.visualization.Histogram(document.getElementById("hist_day")).draw(data, options);
     }
-
 
     if ($("#hist_day").length) {
         // Set a callback to run when the Google Visualization API is loaded.
