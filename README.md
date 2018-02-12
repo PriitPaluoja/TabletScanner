@@ -16,9 +16,9 @@ To deploy web application locally on Ubuntu 16.04, use the following commands in
 * Open web browser on http://localhost:8080/ to access rental scan page or http://localhost:8080/login to sign in to admin view (with credentials provided in the previous step)
 ## Usage
 * To insert devices and users, go to http://localhost:8080/insert 
-* Each device must have 5 symbol indentificator
+* Each device identificator must be exactly 5 symbols long.
 * To register rental, go to http://localhost:8080/
-* For detailed usage (in Estonian), see [PDF](https://github.com/PriitPaluoja/TabletScanner/Seadmete_laenutamine_ja_tagastamine.pdf)
+* For detailed usage (in Estonian), see [PDF](https://github.com/PriitPaluoja/TabletScanner/blob/master/Seadmete_laenutamine_ja_tagastamine.pdf).
 
 
 ![example](https://github.com/PriitPaluoja/TabletScanner/blob/master/usage.jpg)
