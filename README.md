@@ -18,3 +18,6 @@ To deploy web application locally on Ubuntu 16.04, use the following commands in
 * To insert devices and users, go to http://localhost:8080/insert 
 * Each device must have 5 symbol indentificator
 * To register rental, go to http://localhost:8080/
+
+
+Authors: Priit Paluoja, Alari Punning
