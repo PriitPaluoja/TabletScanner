@@ -14,3 +14,7 @@ To deploy web application locally on Ubuntu 16.04, use the following commands in
 * Navigate to sources: `cd TabletScanner/`
 * Run deployment: `./deploy-local.sh`
 * Open web browser on http://localhost:8080/ to access rental scan page or http://localhost:8080/login to sign in to admin view (with credentials provided in the previous step)
+## Usage
+* To insert devices and users, go to http://localhost:8080/insert 
+* Each device must have 5 symbol indentificator
+* To register rental, go to http://localhost:8080/
