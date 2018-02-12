@@ -32,7 +32,7 @@ sudo -u postgres psql -c "ALTER USER $db_user WITH ENCRYPTED PASSWORD '$db_pass'
 sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $db_name TO $db_user;"
 
 # Set db schema
-psql postgresql://$db_user:$db_pass@localhost:5432/$db_name?sslmode=require -a -f TabletScanner/db/db.sql
+psql postgresql://$db_user:$db_pass@localhost:5432/$db_name?sslmode=require -a -f db/db.sql
 
 # Run the web application
 ./gradlew bootRun --stacktrace
