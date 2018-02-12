@@ -21,6 +21,6 @@ To deploy web application locally on Ubuntu 16.04, use the following commands in
 * For detailed usage (in Estonian), see [PDF](https://github.com/PriitPaluoja/TabletScanner/Seadmete_laenutamine_ja_tagastamine.pdf)
 
 
-![example](https://github.com/PriitPaluoja/TabletScanner/usage.jpg)
+![example](https://github.com/PriitPaluoja/TabletScanner/blob/master/usage.jpg)
 
 Authors: Priit Paluoja, Alari Punning
