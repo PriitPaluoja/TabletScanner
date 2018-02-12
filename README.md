@@ -13,4 +13,4 @@ To deploy web application locally on Ubuntu 16.04, use the following commands in
 * Clone sources: `git clone https://github.com/PriitPaluoja/TabletScanner.git`
 * Navigate to sources: `cd TabletScanner/`
 * Run deployment: `./deploy-local.sh`
-* Open web browser on http://localhost:8080/ to access rental scan page or http://localhost:8080/admin to sign in to admin view (with credentials provided in the previous step)
+* Open web browser on http://localhost:8080/ to access rental scan page or http://localhost:8080/login to sign in to admin view (with credentials provided in the previous step)
