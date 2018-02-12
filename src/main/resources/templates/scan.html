@@ -51,11 +51,11 @@
         <div th:id="'tablets'" class="modal fade" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header"><h2 class="modal-title">Sisesta tahvelarvutid</h2></div>
+                    <div class="modal-header"><h2 class="modal-title">Sisesta laenutus</h2></div>
                     <div class="modal-body">
                         <div class="form-group">
                             <h4>Sisestamisel seade nr: <span id="charNum"></span></h4>
-                            <h4><label th:for="${#fields.idFromName('devices')}">Sisesta tahvelarvutid</label></h4>
+                            <h4><label th:for="${#fields.idFromName('devices')}">Sisesta laenutus</label></h4>
                             <textarea th:field="*{devices}" rows="4" cols="50" class="form-control" autofocus="autofocus"></textarea>
                         </div>
                     </div>
