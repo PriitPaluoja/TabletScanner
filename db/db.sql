@@ -16,6 +16,7 @@ CREATE SEQUENCE public.device_id_seq;
 CREATE TABLE public.device (
   id    INTEGER      NOT NULL DEFAULT nextval('public.device_id_seq'),
   ident VARCHAR(100) NOT NULL,
+  device_description VARCHAR(100) NULL,
   CONSTRAINT device_pk PRIMARY KEY (id)
 );
 

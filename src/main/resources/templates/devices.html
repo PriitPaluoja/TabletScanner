@@ -26,6 +26,7 @@
                 <thead>
                 <tr>
                     <th>Idendifikaator</th>
+                    <th>Märkus</th>
                     <th>Aktiivne</th>
                     <th>Laenutusi</th>
                     <th>Muuda</th>
@@ -34,6 +35,7 @@
                 <tbody>
                 <tr th:each="dev, int : ${devices.getDevices()}">
                     <td th:text="${dev.getDeviceIdentification()}"></td>
+                    <td th:text="${dev.getDescription()}"></td>
                     <td th:text="${dev.getActive() ? ' ✔' :'✗'}"></td>
                     <td th:text="${dev.getTotalRentals()}"></td>
                     <td>
@@ -64,6 +66,15 @@
                                     <input type="text"
                                            class="form-control"
                                            th:field="*{devices[__${int.index}__].deviceIdentification}"/>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-body form-group">
+                                    <label th:for="${#fields.idFromName('description')}">Märkus:</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           maxlength="100"
+                                           th:field="*{devices[__${int.index}__].description}"/>
                                 </div>
                             </div>
                             <div class="panel panel-default">

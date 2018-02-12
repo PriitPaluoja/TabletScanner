@@ -39,7 +39,7 @@ public class DataSaveServiceImpl implements DataSaveService {
         if (deviceRepository.findDeviceByIdent(deviceDTO.getDeviceIdentification()) != null) {
             throw new DeviceDuplicateException();
         }
-        deviceRepository.save(new Device(null, deviceDTO.getDeviceIdentification(), true));
+        deviceRepository.save(new Device(null, deviceDTO.getDeviceIdentification(), true, deviceDTO.getDescription()));
     }
 
     @Override
@@ -225,10 +225,10 @@ public class DataSaveServiceImpl implements DataSaveService {
     }
 
     private Function<DeviceDTO, Device> dtoDevice() {
-        return deviceDTO -> new Device(deviceDTO.getId(), deviceDTO.getDeviceIdentification(), deviceDTO.getActive());
+        return deviceDTO -> new Device(deviceDTO.getId(), deviceDTO.getDeviceIdentification(), deviceDTO.getActive(), deviceDTO.getDescription());
     }
 
     private Function<Device, DeviceDTO> deviceDTO() {
-        return device -> new DeviceDTO(device.getId(), device.getIdent(), device.getActive(), rentalRepository.countAllByDeviceIdent(device.getIdent()));
+        return device -> new DeviceDTO(device.getId(), device.getIdent(), device.getActive(), rentalRepository.countAllByDeviceIdent(device.getIdent()), device.getDeviceDescription());
     }
 }

@@ -23,6 +23,7 @@ public class Device {
 
     private String ident;
     private Boolean active;
+    private String deviceDescription;
 
     @Override
     public boolean equals(Object o) {

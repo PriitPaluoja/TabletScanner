@@ -23,6 +23,9 @@ public class DeviceDTO {
 
     private Integer totalRentals;
 
+    @Length(max = 100)
+    private String description;
+
     @Override
     public String toString() {
         return deviceIdentification + ',' + totalRentals + ',' + active;
