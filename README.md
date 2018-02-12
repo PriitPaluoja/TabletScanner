@@ -2,13 +2,15 @@
 
 ##### TabletScanner is an web application for tablet computer (or any other object) rental management.
  
-TabletScanner provides functionality to register rental/returns, disable/add users/devices into the system and see statistical overview.
+TabletScanner provides functionality for registering rental/returns, disabling/adding users/devices into the system and to see statistical overview.
 
-### To use TabletScanner:
-1. Clone sources.
-2. Use gradle to create WAR file.
-3. Use db.sql to fill PostgresSQL database.
-4. Set environmental variables (see application.properties) to Tomcat.
-5. Setup WAR into the Tomcat.
-
-Authors: Priit Paluoja, Alari Punning 
+## Quickstart
+To deploy web application locally on Ubuntu 16.04, use the following commands in terminal:
+* Update: `sudo apt update`
+* Install git: `sudo apt install git`
+* Install JDK: `sudo apt install default-jdk`
+* Install PostgreSQL: `sudo apt install postgresql`
+* Clone sources: `git clone https://github.com/PriitPaluoja/TabletScanner.git`
+* Navigate to sources: `cd TabletScanner/`
+* Run deployment: `./deploy-local.sh`
+* Open web browser on http://localhost:8080/ to access rental scan page or http://localhost:8080/admin to sign in to admin view (with credentials provided in the previous step)

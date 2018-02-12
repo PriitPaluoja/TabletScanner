@@ -1,8 +1,5 @@
 #!/bin/bash
 
-
-#./tablet_scanner.sh scanner priit Qwegmail1234502091995 admin admin
-
 echo "Set database name for rental service, followed by [ENTER]:"
 read db_name
 
@@ -17,15 +14,6 @@ read admin_name
 
 echo "Set password for the admin account, followed by [ENTER]:"
 read admin_pass
-
-# Install the necessary packages 
-sudo apt-get update
-sudo apt-get install git
-sudo apt-get install default-jdk
-sudo apt-get install -y postgresql
-
-# Clone the rental web application
-git clone https://github.com/PriitPaluoja/TabletScanner.git
 
 # Set enviromental variables
 export TABLET_SCAN_URL=jdbc:postgresql://localhost:5432/$db_name
