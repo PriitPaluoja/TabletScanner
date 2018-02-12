@@ -5,7 +5,7 @@
 TabletScanner provides functionality for registering rental/returns, disabling/adding users/devices into the system and to see statistical overview.
 
 ## Quickstart
-To deploy web application locally on Ubuntu 16.04, use the following commands in terminal:
+To deploy web application locally on Ubuntu 16.04, use the following commands in the terminal:
 * Update: `sudo apt update`
 * Install git: `sudo apt install git`
 * Install JDK: `sudo apt install default-jdk`
