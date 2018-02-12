@@ -5,7 +5,7 @@ CREATE TABLE public.device_user (
   first_name VARCHAR(50) NOT NULL,
   last_name  VARCHAR(50) NOT NULL,
   pin        VARCHAR(10),
-  ctive BOOLEAN NULL,
+  active BOOLEAN NULL,
   CONSTRAINT device_user_pk PRIMARY KEY (id)
 );
 
